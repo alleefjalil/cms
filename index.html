@@ -33,7 +33,7 @@
         }
     </script>
     <style>
-        /* Gaya scrollbar kustom untuk estetika UI */
+        /* Custom fine-scrollbar styling for corporate elegance */
         ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: #f8fafc; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
@@ -333,7 +333,6 @@
         let currentMonthData = null;
 
         // REAL-DATA COPY TRANSCRIPT FROM THE GOOGLE SHEET (OFFLINE LOCAL FALLBACK)
-        // Keeps the dashboard functional with exact, matching content when run in sandboxed environments
         const offlineDatabase = {
             changlun: {
                 MEI_2026: {
@@ -351,10 +350,10 @@
                     strategy: "Diversify campaign media formats targeting student communities (UUM, UniMAP, KMK) near Changlun. Post TikTok videos during peak evening hours (8PM-10PM) and publish spiritual or motivational quotes on Friday mornings.",
                     contents: {
                         1: { title: "ABEY JANJI (SULTAN COMBO INTAKE)", format: "Video", status: "Posted", platform: ["Instagram", "Facebook", "TikTok"], caption: "Let us enjoy spicy Ayam Gepuk topped with cold premium ice cream at Ayam Gepuk Sultan Changlun! 😻\n\n📍 Pekan Changlun II (Behind C-MART Changlun)\n⏰ Operating Hours: Daily | 11.00 AM - 10.00 PM\n\nDirect bookings:\nhttps://wa.me/60174695064\n\n#AyamGepukSultan #Changlun #KedahFoodie", link: "https://vt.tiktok.com/ZS92PptJ8S/", gdriveLink: "https://drive.google.com" },
-                        2: { title: "FAMILY MEALTIME PEKAN CHANGLUN", format: "Photo", status: "Posted", platform: ["Instagram", "Facebook"], caption: "THE PERFECT DINNER SPOT FOR FAMILIES! 👨‍👩‍👧‍👦🌶️\nLook at how happy they are enjoying our freshly prepared hot chicken soup alongside our famous spicy gepuk chicken behind C-MART!\n\n📍 Pekan Changlun II\nMore info: https://wa.me/60177455179", link: "https://www.instagram.com", gdriveLink: "https://drive.google.com" },
+                        2: { title: "FAMILY MEALTIME PEKAN CHANGLUN", format: "Photo", status: "Posted", platform: ["Instagram", "Facebook"], caption: "THE PERFECT DINNER SPOT FOR FAMILIES! 👨‍👩‍👧‍👧🌶️\nLook at how happy they are enjoying our freshly prepared hot chicken soup alongside our famous spicy gepuk chicken behind C-MART!\n\n📍 Pekan Changlun II\nMore info: https://wa.me/60177455179", link: "https://www.instagram.com", gdriveLink: "https://drive.google.com" },
                         3: { title: "AYAM GEPUK SULTAN GRAND RETURN 👑", format: "Video", status: "Posted", platform: ["Instagram", "Facebook", "TikTok"], caption: "We are back fully active after the Eid festivities! 😻 Satisfy your spice cravings with our hot sambal today.\n\n📍 Pekan Changlun II\n⏰ Operates: 11.00 AM - 10.00 PM", link: "https://vt.tiktok.com/ZS92PptJ8S/H7Q-XBZBl/", gdriveLink: "" },
-                        4: { title: "SPICY GEPUK LADIES OUTING!", format: "Photo", status: "Posted", platform: ["Instagram", "Facebook"], caption: "These ladies cried happy tears enjoying our super fiery Level Sultan. Bring your friends along this weekend! 👩‍❤️‍👩🌶️", link: "", gdriveLink: "" },
-                        5: { title: "FRIDAY INSPIRATIONAL HADIS", format: "Hadis", status: "Posted", platform: ["Instagram", "Facebook"], caption: "Blessed Friday to all our customers! ✨ Start the day with a grateful heart and positive thoughts.", link: "", gdriveLink: "" }
+                        4: { title: "SPICY GEPUK LADIES OUTING!", format: "Photo", status: "Belum Ditetapkan", platform: ["Instagram", "Facebook"], caption: "These ladies cried happy tears enjoying our super fiery Level Sultan. Bring your friends along this weekend! 👩‍❤️‍👩🌶️", link: "", gdriveLink: "" },
+                        5: { title: "FRIDAY INSPIRATIONAL HADIS", format: "Hadis", status: "Scheduled", platform: ["Instagram", "Facebook"], caption: "Blessed Friday to all our customers! ✨ Start the day with a grateful heart and positive thoughts.", link: "", gdriveLink: "" }
                     }
                 },
                 JULAI_2026: {
@@ -383,7 +382,7 @@
                     contents: {
                         1: { title: "OFFICE DELIVERY SPECIAL", format: "Video", status: "Posted", platform: ["Instagram", "Facebook", "TikTok"], caption: "Hungry at the office? We deliver hot, crispy, and spicy Sultan combos straight to your workspace! 💼🔥\n\n📍 Central Jitra Business Hub\n⏰ Operations: 11.00 AM - 9.30 PM", link: "https://vt.tiktok.com", gdriveLink: "" },
                         2: { title: "SULTAN COMBO JITRA EDITION", format: "Photo", status: "Posted", platform: ["Instagram", "Facebook"], caption: "A wholesome meal crafted for spice lovers. Get our Jitra combo pack at an introductory price this week!", link: "", gdriveLink: "" },
-                        5: { title: "JITRA WEEKEND REMINDER", format: "Hadis", status: "Posted", platform: ["Instagram", "Facebook"], caption: "Weekend is just around the corner. Spend quality time with family over hot and delicious spicy chicken.", link: "", gdriveLink: "" },
+                        5: { title: "JITRA WEEKEND REMINDER", format: "Hadis", status: "Belum Ditetapkan", platform: ["Instagram", "Facebook"], caption: "Weekend is just around the corner. Spend quality time with family over hot and delicious spicy chicken.", link: "", gdriveLink: "" },
                         8: { title: "FAST DELIVERY SERVICE TEASER", format: "Video", status: "Scheduled", platform: ["Instagram", "TikTok"], caption: "Rain or shine, our riders ensure your Ayam Gepuk arrives fresh and burning hot!", link: "", gdriveLink: "" }
                     }
                 },
@@ -576,7 +575,7 @@
 
                     if (dayContent.status === 'Posted') statusBgClasses = "bg-emerald-50/95 border-emerald-200 text-emerald-950 shadow-sm shadow-emerald-500/5";
                     else if (dayContent.status === 'Scheduled') statusBgClasses = "bg-sky-50/95 border-sky-200 text-sky-955 shadow-sm shadow-sky-500/5";
-                    else statusBgClasses = "bg-slate-50 border-slate-200 text-slate-800 shadow-sm";
+                    else statusBgClasses = "bg-rose-50 border-rose-200 text-rose-950 shadow-sm shadow-rose-200/20"; // Tambah warna rose di sini
 
                     if (!matchesSearch || !matchesFormat || !matchesStatus) statusBgClasses += " opacity-25";
 
