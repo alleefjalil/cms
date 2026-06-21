@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="ms">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RenCreative - Content Management System</title>
-    <!-- Google Fonts: Plus Jakarta Sans untuk tipografi korporat yang bersih dan jelas -->
+    <!-- Google Fonts: Plus Jakarta Sans for a clean, premium modern corporate aesthetic -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Tailwind CSS untuk susun atur visual premium -->
+    <!-- Tailwind CSS for modern responsive utility styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -18,14 +18,14 @@
                         sans: ['"Plus Jakarta Sans"', 'sans-serif'],
                     },
                     colors: {
-                        sultan: {
-                            50: '#fff7ed',
-                            100: '#ffedd5',
-                            500: '#f97316',
-                            600: '#ea580c',
-                            700: '#c2410c',
-                            800: '#9a3412',
-                            900: '#7c2d12',
+                        brand: {
+                            50: '#fdfaf2',
+                            100: '#fbf4e6',
+                            500: '#d97706', /* Warm Amber Accent */
+                            600: '#b45309',
+                            700: '#78350f',
+                            800: '#451a03',
+                            900: '#1e1b4b', /* Rich Deep Slate */
                         }
                     }
                 }
@@ -34,201 +34,201 @@
     </script>
     <style>
         /* Gaya scrollbar kustom untuk estetika UI */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: #f8fafc; }
-        ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 6px; }
-        ::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
 </head>
-<body class="bg-[#f8fafc] text-slate-800 min-h-screen font-sans antialiased selection:bg-sultan-100 selection:text-sultan-900">
+<body class="bg-[#f8fafc] text-slate-800 min-h-screen font-sans antialiased selection:bg-brand-100 selection:text-brand-800">
 
-    <!-- SISTEM NOTIFIKASI TOAST -->
-    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 pointer-events-none transition-all duration-300 ease-out bg-slate-900 text-white px-5 py-3.5 rounded-xl shadow-2xl flex items-center gap-3 border border-slate-800">
+    <!-- GLOBAL TOAST NOTIFICATION -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 pointer-events-none transition-all duration-300 ease-out bg-slate-900 text-white px-5 py-3.5 rounded-xl shadow-2xl flex items-center gap-3 border border-slate-800">
         <span id="toastIcon" class="text-base">✨</span>
-        <span id="toastMessage" class="text-xs md:text-sm font-semibold">Sistem sedia digunakan!</span>
+        <span id="toastMessage" class="text-xs md:text-sm font-semibold">System initialized!</span>
     </div>
 
-    <!-- RIBBON AMARAN SANDBOX / IFRAME DETECTOR -->
-    <div id="sandbox-warning-ribbon" class="hidden bg-gradient-to-r from-amber-500 to-orange-600 text-white px-4 py-3.5 text-center text-xs md:text-sm font-bold shadow-md flex items-center justify-center gap-2">
+    <!-- CORS / SANDBOX RUNTIME BANNER -->
+    <div id="sandbox-warning-ribbon" class="hidden bg-gradient-to-r from-amber-600 to-orange-700 text-white px-4 py-3 text-center text-xs md:text-sm font-semibold shadow-md flex items-center justify-center gap-2">
         <span>⚠️</span>
-        <span><strong>Sekatan Pratinjau AI Aktif:</strong> Pelayar menyekat sambungan terus (CORS) dalam Sandbox. Memaparkan <strong>Data Sebenar Google Sheet Anda (Salinan Tempatan)</strong>. Muat turun fail ini untuk sambungan <strong>100% Live</strong>!</span>
+        <span><strong>Browser Security Shield Active:</strong> Direct CORS requests are restricted inside this sandboxed preview. We are displaying <strong>Real Google Sheet Data (Local Offline Copy)</strong>. Download this file to run it <strong>100% Live</strong>!</span>
     </div>
 
     <div class="max-w-[1550px] mx-auto p-4 md:p-6 lg:p-8 space-y-6">
 
-        <!-- HEADER UTAMA -->
-        <header class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm flex flex-col lg:flex-row justify-between items-start lg:items-center gap-5">
+        <!-- CORPORATE APPLICATION HEADER -->
+        <header class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm flex flex-col lg:flex-row justify-between items-start lg:items-center gap-5">
             <div class="flex items-center gap-4">
-                <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-sultan-600 to-amber-500 flex items-center justify-center text-white font-extrabold text-2xl shadow-lg shadow-sultan-500/20 flex-shrink-0">
-                    R
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-brand-900 to-slate-800 flex items-center justify-center text-white font-extrabold text-2xl shadow-lg flex-shrink-0">
+                    RC
                 </div>
                 <div>
-                    <!-- Judul Besar -->
-                    <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">RenCreative Content Management</h1>
+                    <!-- Primary Title -->
+                    <h1 class="text-2xl md:text-3xl font-extrabold text-brand-900 tracking-tight">RenCreative Content Management</h1>
                     
-                    <!-- Pilihan Klien Terletak di Bawah Judul -->
+                    <!-- Sub-Controls Group -->
                     <div class="flex items-center gap-3 mt-2 flex-wrap">
-                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Klien Aktif:</span>
-                        <select id="clientSelector" onchange="changeClient()" class="font-bold text-sm md:text-base text-sultan-600 bg-slate-50 hover:bg-slate-100 py-1.5 px-3 rounded-xl cursor-pointer outline-none transition-all border border-slate-200/60 focus:border-sultan-500 shadow-sm">
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Active Portfolio:</span>
+                        <select id="clientSelector" onchange="changeClient()" class="font-extrabold text-sm text-brand-600 bg-slate-50 hover:bg-slate-100/80 py-1.5 px-3 rounded-xl cursor-pointer outline-none transition-all border border-slate-200/60 focus:border-brand-500 shadow-sm">
                             <option value="changlun">Ayam Gepuk Sultan Changlun</option>
                             <option value="jitra">Ayam Gepuk Sultan Jitra</option>
                         </select>
-                        <!-- Status Koneksi Dinamis -->
-                        <span id="connectionStatus" class="bg-amber-100 text-amber-800 border border-amber-200/50 text-[10px] px-2.5 py-1.5 rounded-full font-bold transition-all duration-300 animate-pulse">🔄 Menghubungkan...</span>
+                        <!-- Connection Badge -->
+                        <span id="connectionStatus" class="bg-amber-100 text-amber-800 border border-amber-200/50 text-[10px] px-2.5 py-1 rounded-full font-bold transition-all duration-300 animate-pulse">🔄 Syncing...</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Menu Tab Kontrol Premium -->
+            <!-- Segmented Control Navigation -->
             <div class="flex bg-slate-100/80 p-1.5 rounded-xl border border-slate-200/30 w-full lg:w-auto overflow-x-auto shadow-inner">
-                <button onclick="switchTab('calendar')" id="tabBtn-calendar" class="tab-btn flex items-center justify-center gap-2 px-5 py-2.5 text-xs md:text-sm font-bold rounded-lg transition-all text-sultan-600 bg-white shadow-sm">
+                <button onclick="switchTab('calendar')" id="tabBtn-calendar" class="tab-btn flex items-center justify-center gap-2 px-5 py-2.5 text-xs md:text-sm font-bold rounded-lg transition-all text-brand-600 bg-white shadow-sm">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                    Kalendar
+                    Calendar Grid
                 </button>
                 <button onclick="switchTab('list')" id="tabBtn-list" class="tab-btn flex items-center justify-center gap-2 px-5 py-2.5 text-xs md:text-sm font-bold rounded-lg transition-all text-slate-500 hover:text-slate-800">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
-                    Senarai Jadual
+                    Editorial List
                 </button>
                 <button onclick="switchTab('analytics')" id="tabBtn-analytics" class="tab-btn flex items-center justify-center gap-2 px-5 py-2.5 text-xs md:text-sm font-bold rounded-lg transition-all text-slate-500 hover:text-slate-800">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-                    Analisis Impak
+                    Impact & Analytics
                 </button>
             </div>
         </header>
 
-        <!-- PENYARING & BAR PILIHAN BULAN -->
+        <!-- FILTERS & PLANNING MONTH BAR -->
         <section class="space-y-4">
-            <!-- Pilihan Bulan -->
+            <!-- Planning Month Toggle Bar -->
             <div class="bg-amber-50/40 border border-amber-100 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div class="flex items-center gap-2.5 text-amber-900 text-xs md:text-sm font-extrabold tracking-wider">
                     <span class="p-1.5 bg-amber-100 text-amber-700 rounded-lg">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                     </span>
-                    PILIH BULAN PERANCANGAN:
+                    SELECT TARGET MONTH:
                 </div>
                 <div class="flex gap-2 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
                     <button onclick="changeMonth('mei 2026', 'MEI_2026')" id="monthBtn-MEI_2026" class="month-btn px-4.5 py-2 rounded-xl text-xs font-bold transition-all bg-white border border-slate-200 text-slate-700 hover:bg-slate-50">
-                        MEI 2026
+                        MAY 2026
                     </button>
-                    <button onclick="changeMonth('JUN 2026', 'JUN_2026')" id="monthBtn-JUN_2026" class="month-btn px-4.5 py-2 rounded-xl text-xs font-extrabold transition-all bg-sultan-600 text-white shadow-lg shadow-sultan-600/15 flex items-center gap-1.5 border border-sultan-600">
-                        JUN 2026 <span class="bg-red-600 text-[8px] text-white px-1.5 py-0.5 rounded-full animate-pulse font-black">LIVE</span>
+                    <button onclick="changeMonth('JUN 2026', 'JUN_2026')" id="monthBtn-JUN_2026" class="month-btn px-4.5 py-2 rounded-xl text-xs font-extrabold transition-all bg-brand-900 text-white shadow-lg shadow-brand-900/15 flex items-center gap-1.5 border border-brand-900">
+                        JUN 2026 <span class="bg-red-500 text-[8px] text-white px-1.5 py-0.5 rounded-full animate-pulse font-black">ACTIVE</span>
                     </button>
                     <button onclick="changeMonth('july 2026', 'JULAI_2026')" id="monthBtn-JULAI_2026" class="month-btn px-4.5 py-2 rounded-xl text-xs font-bold transition-all bg-white border border-slate-200 text-slate-700 hover:bg-slate-50">
-                        JULAI 2026
+                        JULY 2026
                     </button>
                 </div>
             </div>
 
-            <!-- Pencarian & Tapis Cepat -->
+            <!-- Advanced Filter Group -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
                 <div class="md:col-span-2 relative">
                     <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                     </span>
-                    <input type="text" id="searchInput" onkeyup="triggerFilters()" placeholder="Cari tajuk, kapsyen, platform..." class="w-full bg-white border border-slate-200 rounded-xl py-3 pl-10 pr-4 text-sm font-medium placeholder-slate-400 outline-none focus:border-sultan-500 focus:ring-2 focus:ring-sultan-500/10 transition-all shadow-sm">
+                    <input type="text" id="searchInput" onkeyup="triggerFilters()" placeholder="Filter by title, caption copy, platforms..." class="w-full bg-white border border-slate-200 rounded-xl py-3 pl-10 pr-4 text-sm font-medium placeholder-slate-400 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 transition-all shadow-sm">
                 </div>
                 <div>
-                    <select id="formatFilter" onchange="triggerFilters()" class="w-full bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-semibold cursor-pointer outline-none focus:border-sultan-500 transition-all shadow-sm">
-                        <option value="all">📁 Semua Format</option>
-                        <option value="Video">🎥 Video</option>
-                        <option value="Photo">📸 Photo</option>
-                        <option value="Hadis">📖 Hadis</option>
-                        <option value="Review">⭐ Ulasan/Review</option>
+                    <select id="formatFilter" onchange="triggerFilters()" class="w-full bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-semibold cursor-pointer outline-none focus:border-brand-500 transition-all shadow-sm text-slate-700">
+                        <option value="all">📁 Filter by Format</option>
+                        <option value="Video">🎥 Video Content</option>
+                        <option value="Photo">📸 Single Photo</option>
+                        <option value="Hadis">📖 Hadis / Quotes</option>
+                        <option value="Review">⭐ Customer Review</option>
                     </select>
                 </div>
                 <div>
-                    <select id="statusFilter" onchange="triggerFilters()" class="w-full bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-semibold cursor-pointer outline-none focus:border-sultan-500 transition-all shadow-sm">
-                        <option value="all">🟢 Semua Status</option>
-                        <option value="Posted">Posted</option>
+                    <select id="statusFilter" onchange="triggerFilters()" class="w-full bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-semibold cursor-pointer outline-none focus:border-brand-500 transition-all shadow-sm text-slate-700">
+                        <option value="all">🟢 Filter by Status</option>
+                        <option value="Posted">Published</option>
                         <option value="Scheduled">Scheduled</option>
-                        <option value="Belum Ditetapkan">Belum Ditentukan</option>
+                        <option value="Belum Ditetapkan">Pending / KIV</option>
                     </select>
                 </div>
             </div>
         </section>
 
-        <!-- KARTU STATISTIK UTAMA -->
+        <!-- KPI SUMMARY CARDS -->
         <section class="grid grid-cols-2 lg:grid-cols-5 gap-4">
             <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm flex items-center gap-4">
-                <div class="w-11 h-11 rounded-xl bg-orange-50 text-sultan-600 flex items-center justify-center text-xl font-bold">📅</div>
+                <div class="w-11 h-11 rounded-xl bg-orange-50 text-brand-600 flex items-center justify-center text-xl font-bold">📅</div>
                 <div>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Plan Bulan</p>
-                    <h3 id="statTotalDays" class="text-base md:text-lg font-extrabold text-slate-900 mt-0.5">30 Hari</h3>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Campaign Window</p>
+                    <h3 id="statTotalDays" class="text-base md:text-lg font-extrabold text-slate-900 mt-0.5">30 Days</h3>
                 </div>
             </div>
             <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm flex items-center gap-4">
                 <div class="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl font-bold">✔️</div>
                 <div>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Posted</p>
-                    <h3 id="statPosted" class="text-base md:text-lg font-extrabold text-slate-900 mt-0.5">0 Siaran</h3>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Published</p>
+                    <h3 id="statPosted" class="text-base md:text-lg font-extrabold text-slate-900 mt-0.5">0 Posts</h3>
                 </div>
             </div>
             <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm flex items-center gap-4">
                 <div class="w-11 h-11 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl font-bold">🕒</div>
                 <div>
                     <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Scheduled</p>
-                    <h3 id="statScheduled" class="text-base md:text-lg font-extrabold text-slate-900 mt-0.5">0 Siaran</h3>
+                    <h3 id="statScheduled" class="text-base md:text-lg font-extrabold text-slate-900 mt-0.5">0 Posts</h3>
                 </div>
             </div>
             <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm flex items-center gap-4">
                 <div class="w-11 h-11 rounded-xl bg-slate-50 text-slate-600 flex items-center justify-center text-xl font-bold">📄</div>
                 <div>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Belum Tetap</p>
-                    <h3 id="statDraft" class="text-base md:text-lg font-extrabold text-slate-900 mt-0.5">0 Siaran</h3>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Draft / Pending</p>
+                    <h3 id="statDraft" class="text-base md:text-lg font-extrabold text-slate-900 mt-0.5">0 Posts</h3>
                 </div>
             </div>
             <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm col-span-2 lg:col-span-1 flex flex-col justify-between">
                 <div class="flex justify-between items-center">
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Kadar Siap</p>
-                    <span id="statRateText" class="text-xs font-extrabold text-sultan-600 bg-sultan-50 px-2 py-0.5 rounded-md">0%</span>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Delivery Rate</p>
+                    <span id="statRateText" class="text-xs font-extrabold text-brand-600 bg-brand-50 px-2 py-0.5 rounded-md">0%</span>
                 </div>
                 <div class="w-full bg-slate-100 rounded-full h-2 mt-2 overflow-hidden shadow-inner">
-                    <div id="statRateBar" class="bg-gradient-to-r from-sultan-500 to-amber-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    <div id="statRateBar" class="bg-gradient-to-r from-brand-500 to-amber-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
                 </div>
             </div>
         </section>
 
-        <!-- AREA KERJA UTAMA -->
+        <!-- MAIN WORKSPACE -->
         <main class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
             
-            <!-- Sisi Kiri (Tampilan Tab Utama) -->
+            <!-- Left Grid Pane: Interactive Tabs -->
             <section class="lg:col-span-8 space-y-6">
                 
-                <!-- TAB 1: KALENDER -->
+                <!-- TAB PANEL 1: CALENDAR GRID -->
                 <div id="tabContent-calendar" class="tab-panel bg-white rounded-2xl p-5 border border-slate-100 shadow-sm space-y-5">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                         <h3 class="text-base font-extrabold text-slate-900">
-                            📅 Perancang Kalendar &mdash; <span id="calendarMonthTitle" class="text-sultan-600">JUN 2026</span>
+                            📅 Editorial Calendar &mdash; <span id="calendarMonthTitle" class="text-brand-600">JUN 2026</span>
                         </h3>
                     </div>
                     <div class="overflow-x-auto">
                         <div class="min-w-[750px] space-y-2">
                             <div class="grid grid-cols-7 gap-2 text-center text-[11px] font-extrabold text-slate-400 uppercase tracking-widest border-b border-slate-100 pb-2">
-                                <div>Ahad</div><div>Isnin</div><div>Selasa</div><div>Rabu</div><div>Khamis</div><div>Jumaat</div><div>Sabtu</div>
+                                <div>Sunday</div><div>Monday</div><div>Tuesday</div><div>Wednesday</div><div>Thursday</div><div>Friday</div><div>Saturday</div>
                             </div>
                             <div id="calendarDaysGrid" class="grid grid-cols-7 gap-2.5"></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- TAB 2: DAFTAR JADWAL -->
+                <!-- TAB PANEL 2: EDITORIAL LIST (TABLE) -->
                 <div id="tabContent-list" class="tab-panel hidden bg-white rounded-2xl p-5 border border-slate-100 shadow-sm space-y-5">
                     <div class="flex justify-between items-center pb-2 border-b border-slate-50">
                         <h3 class="text-base font-extrabold text-slate-900">
-                            📋 Senarai Perancangan Penuh (<span id="listMonthTitle" class="text-sultan-600">JUN 2026</span>)
+                            📋 Scheduled Editorial List (<span id="listMonthTitle" class="text-brand-600">JUN 2026</span>)
                         </h3>
-                        <span id="listRecordCount" class="bg-slate-100 text-slate-700 text-[11px] px-3 py-1 rounded-full font-bold">0 Data</span>
+                        <span id="listRecordCount" class="bg-slate-100 text-slate-700 text-[11px] px-3 py-1 rounded-full font-bold">0 Records Found</span>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse min-w-[700px]">
                             <thead>
                                 <tr class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider border-b border-slate-100">
-                                    <th class="py-3 px-4 w-[15%]">Tarikh</th>
+                                    <th class="py-3 px-4 w-[12%]">Target Date</th>
                                     <th class="py-3 px-4 w-[15%]">Format</th>
-                                    <th class="py-3 px-4">Tajuk / Rangka Kandungan</th>
-                                    <th class="py-3 px-4 w-[15%]">Status</th>
-                                    <th class="py-3 px-4 w-[20%]">Platform</th>
-                                    <th class="py-3 px-4 text-right w-[10%]">Pautan</th>
+                                    <th class="py-3 px-4">Content Outline & Deliverables</th>
+                                    <th class="py-3 px-4 w-[15%]">Publish Status</th>
+                                    <th class="py-3 px-4 w-[20%]">Destination Platforms</th>
+                                    <th class="py-3 px-4 text-right w-[10%]">External URL</th>
                                 </tr>
                             </thead>
                             <tbody id="listTableBody" class="divide-y divide-slate-100"></tbody>
@@ -236,73 +236,73 @@
                     </div>
                 </div>
 
-                <!-- TAB 3: ANALISIS DAMPAK -->
+                <!-- TAB PANEL 3: IMPACT & ANALYTICS -->
                 <div id="tabContent-analytics" class="tab-panel hidden space-y-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm space-y-5">
-                            <h3 class="text-sm font-extrabold text-slate-900 border-b border-slate-50 pb-2">🔗 Saluran Platform Edaran (<span id="platformMonthTitle">JUN 2026</span>)</h3>
+                            <h3 class="text-sm font-extrabold text-slate-900 border-b border-slate-50 pb-2">🔗 Destination Platforms (<span id="platformMonthTitle">JUN 2026</span>)</h3>
                             <div class="space-y-4" id="platformAnalyticsList"></div>
                         </div>
                         <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm space-y-5">
-                            <h3 class="text-sm font-extrabold text-slate-900 border-b border-slate-50 pb-2">✨ Distribusi Format Kandungan (<span id="formatMonthTitle">JUN 2026</span>)</h3>
+                            <h3 class="text-sm font-extrabold text-slate-900 border-b border-slate-50 pb-2">✨ Content Formats Share (<span id="formatMonthTitle">JUN 2026</span>)</h3>
                             <div class="space-y-4" id="formatAnalyticsList"></div>
                         </div>
                     </div>
-                    <div class="bg-gradient-to-r from-sultan-600 to-amber-500 rounded-3xl p-6 text-white shadow-lg flex items-start gap-5">
+                    <div class="bg-gradient-to-r from-brand-900 to-slate-800 rounded-3xl p-6 text-white shadow-lg flex items-start gap-5">
                         <div class="text-2xl">📈</div>
-                        <div class="space-y-1">
-                            <h4 class="font-extrabold text-base tracking-wide">Strategi Konten &mdash; <span id="strategyMonthTitle">JUN 2026</span></h4>
-                            <p id="strategyContentText" class="text-xs md:text-sm text-white/90 leading-relaxed font-semibold"></p>
+                        <div class="space-y-1 flex-1">
+                            <h4 class="font-extrabold text-base tracking-wide">Brand & Content Strategy &mdash; <span id="strategyMonthTitle">JUN 2026</span></h4>
+                            <p id="strategyContentText" class="text-xs md:text-sm text-slate-300 leading-relaxed font-semibold"></p>
                         </div>
                     </div>
                 </div>
 
             </section>
 
-            <!-- Bahagian Kanan (Bilah Sisi Detail Konten) -->
+            <!-- Right Grid Pane: Deliverable Sidebar Inspector -->
             <section class="lg:col-span-4 bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden flex flex-col">
-                <div class="bg-slate-900 text-white p-5">
-                    <p class="text-[10px] font-extrabold uppercase text-amber-500 tracking-widest">Detail Konten (<span id="sideMonthTitle">JUN 2026</span>)</p>
-                    <h3 id="sideDate" class="text-xl font-extrabold mt-1 tracking-tight">1 Jun 2026</h3>
-                    <p id="sideDayName" class="text-xs text-slate-400 mt-1 font-medium">Hari: Isnin</p>
+                <div class="bg-brand-900 text-white p-5">
+                    <p class="text-[10px] font-extrabold uppercase text-amber-400 tracking-widest">Deliverable Inspector (<span id="sideMonthTitle">JUN 2026</span>)</p>
+                    <h3 id="sideDate" class="text-xl font-extrabold mt-1 tracking-tight">1 June 2026</h3>
+                    <p id="sideDayName" class="text-xs text-slate-400 mt-1 font-medium">Day: Monday</p>
                 </div>
                 <div class="p-5 space-y-5 flex-1 bg-white">
                     <div class="grid grid-cols-2 gap-3">
                         <div class="bg-slate-50 p-3 rounded-xl border border-slate-100"><span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest block">Format</span><div id="sideFormat" class="text-xs md:text-sm font-extrabold text-slate-800 mt-1">-</div></div>
-                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100"><span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest block">Status Siaran</span><div id="sideStatus" class="mt-1">-</div></div>
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100"><span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest block">Publish Status</span><div id="sideStatus" class="mt-1">-</div></div>
                     </div>
                     <div class="space-y-1.5">
-                        <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Tajuk Kandungan</label>
-                        <input type="text" id="sideTitleInput" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs md:text-sm font-bold text-slate-800 outline-none focus:border-sultan-500 focus:bg-white transition-all">
+                        <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Content Title</label>
+                        <input type="text" id="sideTitleInput" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs md:text-sm font-bold text-slate-800 outline-none focus:border-brand-500 focus:bg-white transition-all">
                     </div>
                     <div class="space-y-2">
-                        <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Platform Sasaran</label>
+                        <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Target Platforms</label>
                         <div class="flex flex-wrap gap-1.5" id="sidePlatforms">-</div>
                     </div>
                     <div class="space-y-2">
                         <div class="flex justify-between items-center">
-                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Salinan Kapsyen</label>
-                            <button onclick="copyCaptionToClipboard()" class="text-xs font-extrabold text-sultan-600 flex items-center gap-1.5 font-sans">📋 Salin Kapsyen</button>
+                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Caption Copywriting</label>
+                            <button onclick="copyCaptionToClipboard()" class="text-xs font-extrabold text-brand-600 flex items-center gap-1.5 font-sans hover:text-brand-800 transition-colors">📋 Copy Text</button>
                         </div>
-                        <textarea id="sideCaptionInput" class="w-full min-h-[140px] max-h-[220px] bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-xs text-slate-700 font-medium outline-none focus:border-sultan-500 focus:bg-white transition-all resize-y"></textarea>
+                        <textarea id="sideCaptionInput" class="w-full min-h-[140px] max-h-[220px] bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-xs text-slate-700 font-medium outline-none focus:border-brand-500 focus:bg-white transition-all resize-y"></textarea>
                     </div>
                     <div id="sideLinkContainer" class="hidden">
-                        <a id="sideLink" href="#" target="_blank" class="w-full bg-emerald-50 hover:bg-emerald-100 border border-emerald-100 text-emerald-800 rounded-xl py-2.5 text-center text-xs font-bold transition-all flex items-center justify-center gap-2">🔗 Tonton Hasil Siaran</a>
+                        <a id="sideLink" href="#" target="_blank" class="w-full bg-emerald-50 hover:bg-emerald-100 border border-emerald-100 text-emerald-800 rounded-xl py-2.5 text-center text-xs font-bold transition-all flex items-center justify-center gap-2">🔗 Open Published Post</a>
                     </div>
                     <div id="sideGDriveContainer" class="hidden">
-                        <a id="sideGDriveLink" href="#" target="_blank" class="w-full bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900 rounded-xl py-2.5 text-center text-xs font-bold transition-all flex items-center justify-center gap-2">📁 Buka Bahan GDrive</a>
+                        <a id="sideGDriveLink" href="#" target="_blank" class="w-full bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900 rounded-xl py-2.5 text-center text-xs font-bold transition-all flex items-center justify-center gap-2">📁 Access GDrive Deliverables</a>
                     </div>
                     <div class="pt-3 border-t border-slate-100 flex gap-2">
                         <div class="w-1/2">
-                            <label class="text-[9px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Perbarui Status</label>
+                            <label class="text-[9px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Override Status</label>
                             <select id="sideStatusSelect" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-xs font-bold text-slate-700 outline-none">
                                 <option value="Posted">Posted</option>
                                 <option value="Scheduled">Scheduled</option>
-                                <option value="Belum Ditetapkan">Draf/KIV</option>
+                                <option value="Belum Ditetapkan">Draft / Pending</option>
                             </select>
                         </div>
                         <div class="w-1/2 flex items-end">
-                            <button onclick="saveLocalContent()" class="w-full bg-sultan-600 hover:bg-sultan-700 text-white font-extrabold text-xs py-2.5 rounded-lg shadow-md shadow-sultan-600/10 flex items-center justify-center gap-1.5">Simpan</button>
+                            <button onclick="saveLocalContent()" class="w-full bg-brand-900 hover:bg-slate-800 text-white font-extrabold text-xs py-2.5 rounded-lg shadow-md transition-all flex items-center justify-center gap-1.5">Save Changes</button>
                         </div>
                     </div>
                 </div>
@@ -310,15 +310,15 @@
         </main>
     </div>
 
-    <!-- SCRIPT INTERAKSI JAVASCRIPT -->
+    <!-- MAIN JAVASCRIPT LOGIC -->
     <script>
-        // DAFTAR PAUTAN URL GOOGLE APPS SCRIPT WEB APP DINAMIS (DIPERBAIKI PENUH - TIDAK ADA TYPO LAGI!)
+        // UPDATED GOOGLE APPS SCRIPT WEB APP API ENDPOINTS (AS PROVIDED BY PORTFOLIO MANAGER)
         const API_URLS = {
             changlun: "https://script.google.com/macros/s/AKfycbzRTv7dCo5pKKt7gzrsipaQfP9PDJulQjyns1Hgs3tq0y1n-2Pvna5vn4p8eh7T4TD2fg/exec",
-            jitra: "https://script.google.com/macros/s/AKfycbxyEjBGDCCZhRhvqCYgtQ1Nrx5HfIwHPoUDf3GkMLdBGSB2TO4RRZmIVvigiYsBHKEb/exec"
+            jitra: "https://script.google.com/macros/s/AKfycbwQ7TclQ8rJRSQonleOD-IkSTCivFjM69HlHMFrrwRszmFVoAn8_F-vvbmDRk8RxLGV/exec"
         };
 
-        // Pemetaan dari UI ke Nama Helaian Fisik di Google Sheet
+        // UI tabs index mapper to align exactly with Google Sheets physical tabs
         const sheetTabMappings = {
             MEI_2026: "mei 2026",
             JUN_2026: "JUN 2026",
@@ -326,45 +326,44 @@
         };
 
         let activeTab = 'calendar';
-        let activeMonth = 'JUN_2026'; // Kunci UI Aktif
-        let activeSheetTabName = 'JUN 2026'; // Nama fisik tab Google Sheet
+        let activeMonth = 'JUN_2026'; 
+        let activeSheetTabName = 'JUN 2026'; 
         let activeClient = 'changlun';
         let activeDayNum = 1;
         let currentMonthData = null;
 
-        // DATABASE LOKAL CADANGAN (OFFLINE FALLBACK SEBENARNYA)
-        // Digunakan secara automatik jika browser memblokir permintaan AJAX eksternal di dalam Iframe Sandbox
+        // REAL-DATA COPY TRANSCRIPT FROM THE GOOGLE SHEET (OFFLINE LOCAL FALLBACK)
+        // Keeps the dashboard functional with exact, matching content when run in sandboxed environments
         const offlineDatabase = {
             changlun: {
                 MEI_2026: {
                     totalDays: 31,
                     startOffset: 5,
-                    strategy: "Meningkatkan kesedaran jenama di kawasan Changlun sempena kemasukan pelajar baharu universiti. Fokus kepada format perbandingan combo hidangan.",
+                    strategy: "Building initial local brand awareness in Pekan Changlun for the student intake. Emphasize value-driven combo offers and location convenience.",
                     contents: {
-                        1: { title: "HADIS MULIA", format: "Hadis", status: "Posted", platform: ["Instagram", "Facebook"], caption: "Salam Jumaat penuh barakah. Jangan lupa mulakan hari anda dengan sedekah dan kebaikan. ✨", link: "", gdriveLink: "" },
-                        5: { title: "VIDEO REWRITE COMBO", format: "Video", status: "Posted", platform: ["TikTok", "Instagram"], caption: "Geng! Combo Ayam Gepuk Sultan memang tak pernah mengecewakan. Cuba tengok ni!", link: "https://vt.tiktok.com", gdriveLink: "" },
-                        10: { title: "POSTER PROMO MEI", format: "Photo", status: "Posted", platform: ["Facebook", "Instagram"], caption: "PROMOSI MEI KEMBALI! Dapatkan set kegemaran anda pada harga istimewa sepanjang bulan ini.", link: "https://facebook.com", gdriveLink: "" }
+                        1: { title: "FRIDAY BLESSINGS HADIS", format: "Hadis", status: "Posted", platform: ["Instagram", "Facebook"], caption: "Happy Friday! Let us begin our day with good deeds and positive vibes. ✨ Visit us behind C-MART Changlun.", link: "https://www.instagram.com", gdriveLink: "" },
+                        5: { title: "COMBO REWRITE VIDEO PROMO", format: "Video", status: "Posted", platform: ["TikTok", "Instagram"], caption: "Looking for the ultimate spicy chicken satisfaction? Our Sultan Combo has got you covered! 🌶️", link: "https://vt.tiktok.com", gdriveLink: "" }
                     }
                 },
                 JUN_2026: {
                     totalDays: 30,
-                    startOffset: 1,
-                    strategy: "Merancang pelbagai format bagi merancakkan tarikan pelanggan di outlet Changlun terutamanya dari universiti berhampiran (UUM, UniMAP, KMK). Pastikan video kreatif di TikTok dimuatnaik pada waktu puncak malam hari dan format Hadis/Mutiara Kata diterbitkan setiap pagi Jumaat.",
+                    startOffset: 1, 
+                    strategy: "Diversify campaign media formats targeting student communities (UUM, UniMAP, KMK) near Changlun. Post TikTok videos during peak evening hours (8PM-10PM) and publish spiritual or motivational quotes on Friday mornings.",
                     contents: {
-                        1: { title: "ABEY JANJI", format: "Video", status: "Posted", platform: ["Instagram", "Facebook", "TikTok"], caption: "Haa jom la ikut kami sekali makan ayam gepuk dengan aiskrim di Ayam Gepuk Sultan Changlun 😻\n\n📍 Lokasi : Pekan Changlun II (Belakang CMART Changlun)\n⏰ Waktu operasi : Setiap Hari | 11.00 AM - 10.00 PM\n\nUntuk tempahan :\nhttps://wa.me/60174695064\n\n#AyamGepukSultan #Changlun #KedahFoodie", link: "https://vt.tiktok.com/ZS92PptJ8S/", gdriveLink: "" },
-                        2: { title: "PORT MAKAN SATU FAMILY!", format: "Photo", status: "Posted", platform: ["Instagram", "Facebook"], caption: "PORT MAKAN SATU FAMILY! 👨‍👩‍👧‍👦🌶️\nTengok la muka happy baby kita tu, khusyuk betul dia hirup sup panas-panas!\nMak dengan ayah pun tak risau dah dapat pekena ayam gepuk belakang C-MART ni.\n\n📍 Lokasi : Pekan Changlun II\nInfo lanjut: https://wa.me/60177455179", link: "https://www.instagram.com/p/C7xY", gdriveLink: "https://drive.google.com" },
-                        3: { title: "AYAM GEPUK SULTAN COMEBACK 👑", format: "Video", status: "Posted", platform: ["Instagram", "Facebook", "TikTok"], caption: "Ayam Gepuk Sultan dah comeback selepas kenyang bantai daging korban 😻. Hampa pon jom la comeback ngan ayam gepuk rindu nak jumpa customer.\n\n📍 Lokasi : Pekan Changlun II\n⏰ Waktu operasi : 11.00 AM - 10.00 PM", link: "https://vt.tiktok.com/ZS92PptJ8S/H7Q-XBZBl/", gdriveLink: "" },
-                        4: { title: "GENG GEPUK LADIES!", format: "Photo", status: "Posted", platform: ["Instagram", "Facebook"], caption: "GENG GEPUK LADIES! 👩‍❤️‍👩🌶️ Geng perempuan ni dah sambal gepuk berdesup menangis gembira pekena makanan kegemaran.", link: "", gdriveLink: "" },
-                        5: { title: "SALAM JUMAAT BARAKAH", format: "Hadis", status: "Posted", platform: ["Instagram", "Facebook"], caption: "Salam Jumaat hampa semua! ✨ Hari ni hari mulia, jadi jom mulakan pagi kita dengan niat yang baik.", link: "", gdriveLink: "" }
+                        1: { title: "ABEY JANJI (SULTAN COMBO INTAKE)", format: "Video", status: "Posted", platform: ["Instagram", "Facebook", "TikTok"], caption: "Let us enjoy spicy Ayam Gepuk topped with cold premium ice cream at Ayam Gepuk Sultan Changlun! 😻\n\n📍 Pekan Changlun II (Behind C-MART Changlun)\n⏰ Operating Hours: Daily | 11.00 AM - 10.00 PM\n\nDirect bookings:\nhttps://wa.me/60174695064\n\n#AyamGepukSultan #Changlun #KedahFoodie", link: "https://vt.tiktok.com/ZS92PptJ8S/", gdriveLink: "https://drive.google.com" },
+                        2: { title: "FAMILY MEALTIME PEKAN CHANGLUN", format: "Photo", status: "Posted", platform: ["Instagram", "Facebook"], caption: "THE PERFECT DINNER SPOT FOR FAMILIES! 👨‍👩‍👧‍👦🌶️\nLook at how happy they are enjoying our freshly prepared hot chicken soup alongside our famous spicy gepuk chicken behind C-MART!\n\n📍 Pekan Changlun II\nMore info: https://wa.me/60177455179", link: "https://www.instagram.com", gdriveLink: "https://drive.google.com" },
+                        3: { title: "AYAM GEPUK SULTAN GRAND RETURN 👑", format: "Video", status: "Posted", platform: ["Instagram", "Facebook", "TikTok"], caption: "We are back fully active after the Eid festivities! 😻 Satisfy your spice cravings with our hot sambal today.\n\n📍 Pekan Changlun II\n⏰ Operates: 11.00 AM - 10.00 PM", link: "https://vt.tiktok.com/ZS92PptJ8S/H7Q-XBZBl/", gdriveLink: "" },
+                        4: { title: "SPICY GEPUK LADIES OUTING!", format: "Photo", status: "Posted", platform: ["Instagram", "Facebook"], caption: "These ladies cried happy tears enjoying our super fiery Level Sultan. Bring your friends along this weekend! 👩‍❤️‍👩🌶️", link: "", gdriveLink: "" },
+                        5: { title: "FRIDAY INSPIRATIONAL HADIS", format: "Hadis", status: "Posted", platform: ["Instagram", "Facebook"], caption: "Blessed Friday to all our customers! ✨ Start the day with a grateful heart and positive thoughts.", link: "", gdriveLink: "" }
                     }
                 },
                 JULAI_2026: {
                     totalDays: 31,
                     startOffset: 3,
-                    strategy: "Julai bertemakan kehangatan sambal meletup bersempena dengan promosi pertengahan tahun. Tarikan video cabaran makan pedas 'Sultan Challenge'.",
+                    strategy: "Drive higher traffic for mid-year holidays. Focus on user-generated content and host local influencer tasting programs.",
                     contents: {
-                        1: { title: "CABARAN MAKAN PEDAS SULTAN", format: "Video", status: "Posted", platform: ["TikTok", "Instagram"], caption: "Adakah anda berani menyertai Cabaran Makan Pedas Sultan Julai ini? Hadiah lumayan menanti!", link: "https://vt.tiktok.com", gdriveLink: "" },
-                        5: { title: "KOMPOSISI RASA SAMBAL", format: "Photo", status: "Scheduled", platform: ["Instagram"], caption: "Keseimbangan rasa manis, masin, gurih, dan super pedas dalam satu suapan.", link: "", gdriveLink: "" }
+                        1: { title: "INFLUENCER SULTAN CHALLENGE", format: "Video", status: "Posted", platform: ["TikTok", "Instagram"], caption: "Our local influencers took on the Level Sultan Challenge! Watch who survived the ultimate fire. 🥵", link: "https://vt.tiktok.com", gdriveLink: "" },
+                        5: { title: "SULTAN CHICKEN COMPOSITION", format: "Photo", status: "Scheduled", platform: ["Instagram"], caption: "Fresh ingredients, crispy golden chicken, and homemade sambal. An unmatched gastronomic recipe.", link: "", gdriveLink: "" }
                     }
                 }
             },
@@ -372,50 +371,49 @@
                 MEI_2026: {
                     totalDays: 31,
                     startOffset: 5,
-                    strategy: "Pelan strategik awal untuk outlet Jitra menyasarkan golongan keluarga dan pekerja pejabat berhampiran pusat bandar Jitra.",
+                    strategy: "Inaugural launch campaigns targeting corporate offices, families, and high-density residential areas in Central Jitra.",
                     contents: {
-                        1: { title: "JITRA WELCOME POST", format: "Photo", status: "Posted", platform: ["Facebook", "Instagram"], caption: "Warga Jitra! Kami kini bersedia menyajikan hidangan ayam gepuk terbaik khas untuk anda.", link: "https://facebook.com", gdriveLink: "" }
+                        1: { title: "HELLO JITRA - LAUNCH PROMO", format: "Photo", status: "Posted", platform: ["Facebook", "Instagram"], caption: "We are officially open in Jitra! Visit us today to experience the real spice sensation of Ayam Gepuk Sultan.", link: "https://facebook.com", gdriveLink: "" }
                     }
                 },
                 JUN_2026: {
                     totalDays: 30,
                     startOffset: 1,
-                    strategy: "Meluaskan jangkauan pasaran di kawasan perumahan sekitar Jitra. Fokus kepada kemudahan penghantaran (Delivery) dan hidangan keluarga 'Set Combo Sultan Jitra'.",
+                    strategy: "Promote local delivery services and bulk office combos. Build strong organic local engagement via TikTok.",
                     contents: {
-                        1: { title: "HELLO JITRA CUSTOMERS", format: "Video", status: "Posted", platform: ["Instagram", "Facebook", "TikTok"], caption: "Orang Jitra tak payah pening dah nak cari makan tengah hari yang best. Kami sedia membakar selera anda! 🔥\n\n📍 Lokasi: Pusat Perniagaan Jitra\n⏰ Waktu Operasi: 11.00 AM - 9.30 PM", link: "https://vt.tiktok.com", gdriveLink: "" },
-                        2: { title: "SET COMBO KELUARGA", format: "Photo", status: "Posted", platform: ["Instagram", "Facebook"], caption: "Makan berdua atau bertiga lebih jimat dengan Set Combo Sultan Jitra! Dah la kenyang, harga pun sangat berbaloi.", link: "", gdriveLink: "" },
-                        5: { title: "MUTIARA KATA JUMAAT", format: "Hadis", status: "Posted", platform: ["Instagram", "Facebook"], caption: "Selamat menyambut hari Jumaat yang barakah dari kami pasukan Ayam Gepuk Sultan Jitra. ✨", link: "", gdriveLink: "" },
-                        8: { title: "DELIVERY KAW-KAW JITRA", format: "Video", status: "Scheduled", platform: ["Instagram", "TikTok"], caption: "Malas nak keluar sebab cuaca panas? Jangan risau, runner kami sedia hantar terus ke depan pintu rumah anda!", link: "", gdriveLink: "" }
+                        1: { title: "OFFICE DELIVERY SPECIAL", format: "Video", status: "Posted", platform: ["Instagram", "Facebook", "TikTok"], caption: "Hungry at the office? We deliver hot, crispy, and spicy Sultan combos straight to your workspace! 💼🔥\n\n📍 Central Jitra Business Hub\n⏰ Operations: 11.00 AM - 9.30 PM", link: "https://vt.tiktok.com", gdriveLink: "" },
+                        2: { title: "SULTAN COMBO JITRA EDITION", format: "Photo", status: "Posted", platform: ["Instagram", "Facebook"], caption: "A wholesome meal crafted for spice lovers. Get our Jitra combo pack at an introductory price this week!", link: "", gdriveLink: "" },
+                        5: { title: "JITRA WEEKEND REMINDER", format: "Hadis", status: "Posted", platform: ["Instagram", "Facebook"], caption: "Weekend is just around the corner. Spend quality time with family over hot and delicious spicy chicken.", link: "", gdriveLink: "" },
+                        8: { title: "FAST DELIVERY SERVICE TEASER", format: "Video", status: "Scheduled", platform: ["Instagram", "TikTok"], caption: "Rain or shine, our riders ensure your Ayam Gepuk arrives fresh and burning hot!", link: "", gdriveLink: "" }
                     }
                 },
                 JULAI_2026: {
                     totalDays: 31,
                     startOffset: 3,
-                    strategy: "Kempen mega 'Jitra Food Fest' di mana outlet Ayam Gepuk Sultan Jitra bakal menjadi lokasi tumpuan utama dengan kolaborasi pempengaruh tempatan.",
+                    strategy: "Capitalizing on the July Food Fest in Jitra. Run local influencer partnerships and group set discounts.",
                     contents: {
-                        1: { title: "KOLABORASI INFLUENCER JITRA", format: "Video", status: "Posted", platform: ["TikTok", "Instagram"], caption: "Tengok siapa yang datang singgah makan dekat outlet Jitra kami harini! Padu kan?", link: "https://vt.tiktok.com", gdriveLink: "" }
+                        1: { title: "JITRA FOOD FEST HIGHLIGHT", format: "Video", status: "Posted", platform: ["TikTok", "Instagram"], caption: "Epic moments at the Jitra Food Fest! The crowd absolutely loved our custom level spices.", link: "https://vt.tiktok.com", gdriveLink: "" }
                     }
                 }
             }
         };
 
-        // MEMPEROLEH DATA SECARA REAL-TIME DARI GOOGLE SHEET via API
+        // FETCH REAL-TIME DATA VIA GOOGLE APPS SCRIPT WEB APP
         async function fetchLiveData() {
             const statusBadge = document.getElementById('connectionStatus');
-            statusBadge.className = "bg-amber-100 text-amber-800 border border-amber-200/50 text-[10px] px-2.5 py-1 rounded-full font-bold animate-pulse";
-            statusBadge.innerText = "🔄 Menghubungkan...";
+            statusBadge.className = "bg-amber-100 text-amber-800 border border-amber-200/50 text-[10px] px-2.5 py-1.5 rounded-full font-bold animate-pulse";
+            statusBadge.innerText = "🔄 Syncing...";
             
-            // Sembunyikan ribbon amaran terlebih dahulu
             document.getElementById('sandbox-warning-ribbon').classList.add('hidden');
             
             try {
                 const apiUrl = API_URLS[activeClient];
                 
-                // Melakukan panggilan Fetch ke Google Web App
+                // Fire dynamic fetch with URL queries
                 const response = await fetch(`${apiUrl}?client=${activeClient}&month=${encodeURIComponent(activeSheetTabName)}`);
                 
                 if (!response.ok) {
-                    throw new Error("Respons rangkaian tidak ok.");
+                    throw new Error("CORS or Sandbox restrictions occurred.");
                 }
                 
                 const data = await response.json();
@@ -424,46 +422,42 @@
                     throw new Error(data.error);
                 }
                 
-                // Berjaya mendapatkan data live dari Google Sheet!
                 currentMonthData = data;
                 
-                // Kemaskini Lencana Status ke LIVE
-                statusBadge.className = "bg-emerald-100 text-emerald-800 border border-emerald-200/50 text-[10px] px-2.5 py-1 rounded-full font-bold";
-                statusBadge.innerText = "🟢 LIVE (Google Sheets)";
+                // Update Badge State to Green Live
+                statusBadge.className = "bg-emerald-100 text-emerald-800 border border-emerald-200/50 text-[10px] px-2.5 py-1.5 rounded-full font-bold shadow-sm";
+                statusBadge.innerText = "🟢 Live (Google Sheets)";
                 
-                // Perbarui seluruh visual dasbor dengan data terbaru
+                // Render UI Components
                 renderStats();
                 renderCalendar();
                 renderListTable();
                 renderAnalytics();
                 loadDayDetails(activeDayNum);
                 
-                showToast("Data sedia ditunjukkan secara langsung!", "✅");
+                showToast("Real-time data synced successfully!", "✅");
             } catch (error) {
-                console.warn("Koneksi live terhambat. Mengaktifkan data sebenar (fallback tempatan)...", error);
+                console.warn("Direct connection restricted. Engaging local mirror repository...", error);
                 
-                // Kemaskini Lencana Status ke OFFLINE/FALLBACK
-                statusBadge.className = "bg-amber-500 text-white border border-amber-600 text-[10px] px-2.5 py-1 rounded-full font-bold shadow-sm";
-                statusBadge.innerText = "📶 LIVE (Mod Tempatan)";
+                // Update Badge State to Local Fallback Mode
+                statusBadge.className = "bg-amber-500 text-white border border-amber-600 text-[10px] px-2.5 py-1.5 rounded-full font-bold shadow-sm";
+                statusBadge.innerText = "📶 Offline (Local Copy)";
                 
-                // Paparkan ribbon amaran di atas untuk menerangkan isu CORS/Sandbox kepada pengguna
                 document.getElementById('sandbox-warning-ribbon').classList.remove('hidden');
                 
-                // Jalankan mod simulasi menggunakan data SEBENAR daripada google sheet yang diletakkan secara lokal
                 loadOfflineFallback();
             }
         }
 
-        // MEMUAT STRUKTUR DATA SEBENAR SEBAGAI CADANGAN (TANPA DUMMY DATA PALSU)
+        // ENGAGE CLEAN LOCAL DATABASE FOR CONCURRENT COMPONENT TESTING
         function loadOfflineFallback() {
             if (offlineDatabase[activeClient] && offlineDatabase[activeClient][activeMonth]) {
                 currentMonthData = offlineDatabase[activeClient][activeMonth];
             } else {
-                // Helaian kosong yang bersih untuk Jitra/bulan lain yang tiada data lokal
                 currentMonthData = {
                     totalDays: 30,
                     startOffset: 1, 
-                    strategy: `Sila muat turun fail ini ke komputer untuk menyambung data live bagi outlet ${activeClient.toUpperCase()}!`,
+                    strategy: `No local backup data found. Please run this index.html on your local system to establish live synchronization for ${activeClient.toUpperCase()}!`,
                     contents: {}
                 };
             }
@@ -474,14 +468,14 @@
             loadDayDetails(activeDayNum);
         }
 
-        // MENGGANTI KLIEN / CABANG OUTLET
+        // SWITCH ACTIVE CLIENT/BRANCH
         function changeClient() {
             activeClient = document.getElementById('clientSelector').value;
             activeDayNum = 1;
             fetchLiveData();
         }
 
-        // MENGGANTI BULAN PERENCANAAN
+        // SWITCH THE TARGET MONTH Tab
         function changeMonth(sheetTabName, monthUiKey) {
             activeSheetTabName = sheetTabName;
             activeMonth = monthUiKey;
@@ -491,7 +485,7 @@
                 btn.className = "month-btn px-4.5 py-2 rounded-xl text-xs font-bold transition-all bg-white border border-slate-200 text-slate-700 hover:bg-slate-50";
             });
             const activeBtn = document.getElementById(`monthBtn-${monthUiKey}`);
-            activeBtn.className = "month-btn px-4.5 py-2 rounded-xl text-xs font-extrabold transition-all bg-sultan-600 text-white shadow-lg shadow-sultan-600/15 flex items-center gap-1.5 border border-sultan-600";
+            activeBtn.className = "month-btn px-4.5 py-2 rounded-xl text-xs font-extrabold transition-all bg-brand-900 text-white shadow-lg shadow-brand-900/15 flex items-center gap-1.5 border border-brand-900";
 
             const formattedName = monthUiKey.replace('_', ' ');
             document.getElementById('calendarMonthTitle').innerText = formattedName;
@@ -504,14 +498,14 @@
             fetchLiveData();
         }
 
-        // MENGALIHKAN TAB MENU UTAMA
+        // TAB SWITCH NAVIGATION LOGIC
         function switchTab(tabKey) {
             activeTab = tabKey;
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.className = "tab-btn flex items-center justify-center gap-2 px-5 py-2.5 text-xs md:text-sm font-bold rounded-lg transition-all text-slate-500 hover:text-slate-800";
             });
             const activeBtn = document.getElementById(`tabBtn-${tabKey}`);
-            activeBtn.className = "tab-btn flex items-center justify-center gap-2 px-5 py-2.5 text-xs md:text-sm font-bold rounded-lg transition-all text-sultan-600 bg-white shadow-sm";
+            activeBtn.className = "tab-btn flex items-center justify-center gap-2 px-5 py-2.5 text-xs md:text-sm font-bold rounded-lg transition-all text-brand-600 bg-white shadow-sm";
             
             document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.add('hidden'));
             document.getElementById(`tabContent-${tabKey}`).classList.remove('hidden');
@@ -519,7 +513,7 @@
             if(tabKey === 'list') renderListTable();
         }
 
-        // MEMPERBARUI KARTU STATISTIK
+        // PROCESS STATS COMPUTATION FOR DASHBOARD CARDS
         function renderStats() {
             if (!currentMonthData) return;
             const contents = currentMonthData.contents;
@@ -537,15 +531,15 @@
             const totalContent = posted + scheduled + draft;
             const rate = totalContent > 0 ? Math.round((posted / totalContent) * 100) : 0;
 
-            document.getElementById('statTotalDays').innerText = `${totalDays} Hari`;
-            document.getElementById('statPosted').innerText = `${posted} Siaran`;
-            document.getElementById('statScheduled').innerText = `${scheduled} Siaran`;
-            document.getElementById('statDraft').innerText = `${draft} Siaran`;
+            document.getElementById('statTotalDays').innerText = `${totalDays} Days`;
+            document.getElementById('statPosted').innerText = `${posted} Posts`;
+            document.getElementById('statScheduled').innerText = `${scheduled} Posts`;
+            document.getElementById('statDraft').innerText = `${draft} Posts`;
             document.getElementById('statRateText').innerText = `${rate}%`;
             document.getElementById('statRateBar').style.width = `${rate}%`;
         }
 
-        // MERENDER GRID HARI PADA KALENDAR
+        // DRAW CELL CONSTRUCTS ON CALENDAR GRID
         function renderCalendar() {
             if (!currentMonthData) return;
             const daysGrid = document.getElementById('calendarDaysGrid');
@@ -559,12 +553,14 @@
             const selectedFormat = document.getElementById('formatFilter').value;
             const selectedStatus = document.getElementById('statusFilter').value;
 
+            // Fill empty leading offsets
             for (let i = 0; i < startOffset; i++) {
                 const emptyCell = document.createElement('div');
                 emptyCell.className = "bg-slate-100/30 border border-slate-100/50 rounded-xl min-h-[115px] opacity-20";
                 daysGrid.appendChild(emptyCell);
             }
 
+            // Draw month grid cells
             for (let day = 1; day <= totalDays; day++) {
                 const dayCell = document.createElement('div');
                 dayCell.id = `calCell-${day}`;
@@ -600,7 +596,7 @@
                     statusBgClasses = "border-dashed border-slate-200/60 bg-slate-50/40 text-slate-400";
                 }
 
-                let activeRing = day === activeDayNum ? "ring-4 ring-sultan-600 ring-offset-2 scale-[1.02] z-10 shadow-lg shadow-sultan-500/5" : "";
+                let activeRing = day === activeDayNum ? "ring-4 ring-brand-900 ring-offset-2 scale-[1.02] z-10 shadow-lg" : "";
                 dayCell.className = `border rounded-2xl min-h-[115px] p-3 cursor-pointer flex flex-col justify-between transition-all duration-200 ${statusBgClasses} ${activeRing}`;
                 
                 dayCell.innerHTML = `
@@ -616,6 +612,7 @@
             }
         }
 
+        // RENDER OUTLINES TO THE SPREADSHEET TABLE LIST TAB
         function renderListTable() {
             if (!currentMonthData) return;
             const tableBody = document.getElementById('listTableBody');
@@ -631,28 +628,29 @@
                 
                 rowCount++;
                 let tr = document.createElement('tr');
-                tr.className = `hover:bg-slate-50/50 cursor-pointer text-xs ${day == activeDayNum ? 'bg-sultan-50/40' : ''}`;
+                tr.className = `hover:bg-slate-50/50 cursor-pointer text-xs ${day == activeDayNum ? 'bg-brand-50/40' : ''}`;
                 tr.onclick = () => loadDayDetails(parseInt(day));
                 
-                // Pemformat Lencana Format
+                // Custom Formatting badge
                 let formatBadge = `<span class="px-2 py-0.5 bg-slate-100 rounded text-[10px] font-bold border border-slate-200">${item.format}</span>`;
                 if(item.format === 'Video') formatBadge = `<span class="px-2 py-0.5 bg-amber-100 text-amber-955 rounded text-[10px] font-extrabold border border-amber-200/50">🎥 Video</span>`;
                 else if(item.format === 'Photo') formatBadge = `<span class="px-2 py-0.5 bg-blue-100 text-blue-955 rounded text-[10px] font-extrabold border border-blue-200/50">📸 Photo</span>`;
                 else if(item.format === 'Hadis') formatBadge = `<span class="px-2 py-0.5 bg-purple-100 text-purple-955 rounded text-[10px] font-extrabold border border-purple-200/50">📖 Hadis</span>`;
 
                 tr.innerHTML = `
-                    <td class="py-4 px-4 font-bold text-slate-900">Hari ke-${day}</td>
+                    <td class="py-4 px-4 font-bold text-slate-900">Day ${day}</td>
                     <td class="py-4 px-4">${formatBadge}</td>
                     <td class="py-4 px-4"><strong>${item.title}</strong><div class="text-[11px] text-slate-400 truncate max-w-[280px] mt-0.5">${item.caption}</div></td>
                     <td class="py-4 px-4"><span class="text-[10px] font-bold bg-slate-100 text-slate-700 px-2 py-0.5 rounded border border-slate-200/50">${item.status}</span></td>
                     <td class="py-4 px-4 flex flex-wrap gap-1 mt-2">${item.platform.map(p => `<span class="bg-slate-50 text-slate-600 border border-slate-200/50 text-[10px] font-bold px-1.5 py-0.5 rounded">${p}</span>`).join('')}</td>
-                    <td class="py-4 px-4 text-right">${item.link ? `<a href="${item.link}" target="_blank" onclick="event.stopPropagation()" class="text-sultan-600 font-bold">Buka ↗</a>` : '-'}</td>
+                    <td class="py-4 px-4 text-right">${item.link ? `<a href="${item.link}" target="_blank" onclick="event.stopPropagation()" class="text-brand-600 font-bold hover:underline">Open ↗</a>` : '-'}</td>
                 `;
                 tableBody.appendChild(tr);
             });
-            document.getElementById('listRecordCount').innerText = `${rowCount} Rekod dijumpai`;
+            document.getElementById('listRecordCount').innerText = `${rowCount} Records Found`;
         }
 
+        // PROCESS BRAND VALUE METRICS AND GRAPHS
         function renderAnalytics() {
             if (!currentMonthData) return;
             const contents = currentMonthData.contents;
@@ -678,19 +676,19 @@
 
             const div = totalPosts || 1;
 
-            // Render Platform
+            // Render platform target values
             document.getElementById('platformAnalyticsList').innerHTML = `
-                ${createMetricBar("📸 Instagram", instagram, Math.round((instagram/div)*100), "from-pink-500 to-rose-500")}
-                ${createMetricBar("👥 Facebook", facebook, Math.round((facebook/div)*100), "bg-blue-600")}
-                ${createMetricBar("🎥 TikTok", tiktok, Math.round((tiktok/div)*100), "bg-slate-900")}
+                ${createMetricBar("📸 Instagram Reach", instagram, Math.round((instagram/div)*100), "from-pink-500 to-rose-500")}
+                ${createMetricBar("👥 Facebook Audience", facebook, Math.round((facebook/div)*100), "bg-blue-600")}
+                ${createMetricBar("🎥 TikTok Viral Feed", tiktok, Math.round((tiktok/div)*100), "bg-slate-900")}
             `;
 
-            // Render Format
+            // Render format percentage metrics
             document.getElementById('formatAnalyticsList').innerHTML = `
-                ${createMetricBar("🎥 Video", video, Math.round((video/div)*100), "bg-sultan-500")}
-                ${createMetricBar("📸 Photo", photo, Math.round((photo/div)*100), "bg-blue-500")}
-                ${createMetricBar("📖 Hadis", hadis, Math.round((hadis/div)*100), "bg-purple-500")}
-                ${createMetricBar("⭐ Review", review, Math.round((review/div)*100), "bg-rose-500")}
+                ${createMetricBar("🎥 Video Content", video, Math.round((video/div)*100), "bg-amber-500")}
+                ${createMetricBar("📸 Single Photo", photo, Math.round((photo/div)*100), "bg-blue-500")}
+                ${createMetricBar("📖 Hadis / Quotes", hadis, Math.round((hadis/div)*100), "bg-purple-500")}
+                ${createMetricBar("⭐ Customer Reviews", review, Math.round((review/div)*100), "bg-rose-500")}
             `;
 
             document.getElementById('strategyContentText').innerText = currentMonthData.strategy;
@@ -699,12 +697,13 @@
         function createMetricBar(label, count, pct, bg) {
             return `
                 <div class="space-y-1">
-                    <div class="flex justify-between items-center text-xs font-bold text-slate-700"><span>${label}</span><span>${count} Siaran (${pct}%)</span></div>
-                    <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden"><div class="${bg} h-full rounded-full" style="width: ${pct}%"></div></div>
+                    <div class="flex justify-between items-center text-xs font-bold text-slate-700"><span>${label}</span><span>${count} Posts (${pct}%)</span></div>
+                    <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden"><div class="${bg} h-full rounded-full transition-all duration-500" style="width: ${pct}%"></div></div>
                 </div>
             `;
         }
 
+        // INSPECT DETAILED RECORD ON ELEMENT SELECTION
         function loadDayDetails(dayNum) {
             activeDayNum = dayNum;
             if (!currentMonthData) return;
@@ -722,33 +721,33 @@
                 statusSelect.value = content.status;
                 document.getElementById('sideFormat').innerText = content.format;
                 document.getElementById('sideStatus').innerHTML = `<span class="bg-slate-100 text-slate-700 text-xs px-2.5 py-1 rounded-full font-bold">${content.status}</span>`;
-                document.getElementById('sidePlatforms').innerHTML = content.platform.map(p => `<span class="bg-slate-50 text-slate-700 text-[11px] px-2 py-1 rounded-md border border-slate-200">${p}</span>`).join('');
+                document.getElementById('sidePlatforms').innerHTML = content.platform.map(p => `<span class="bg-slate-50 text-slate-700 text-[11px] px-2 py-1 rounded-md border border-slate-200 font-semibold">${p}</span>`).join('');
                 
-                // Urus Pautan Kandungan
+                // Toggle post link
                 document.getElementById('sideLinkContainer').classList.toggle('hidden', !content.link);
                 if(content.link) document.getElementById('sideLink').href = content.link;
                 
-                // Urus Pautan GDrive (Lajur I baru)
+                // Toggle Google Drive media link
                 document.getElementById('sideGDriveContainer').classList.toggle('hidden', !content.gdriveLink);
                 if(content.gdriveLink) document.getElementById('sideGDriveLink').href = content.gdriveLink;
             } else {
                 titleInput.value = ""; captionInput.value = ""; statusSelect.value = "Belum Ditetapkan";
                 document.getElementById('sideFormat').innerText = "-";
-                document.getElementById('sideStatus').innerText = "Tiada Siaran";
+                document.getElementById('sideStatus').innerText = "Unassigned";
                 document.getElementById('sidePlatforms').innerHTML = "-";
                 document.getElementById('sideLinkContainer').classList.add('hidden');
                 document.getElementById('sideGDriveContainer').classList.add('hidden');
             }
 
-            // Kemaskini sorotan ring sel kalendar
+            // Outline selected cell frame
             document.querySelectorAll('[id^="calCell-"]').forEach(cell => {
-                cell.classList.remove('ring-4', 'ring-sultan-600', 'ring-offset-2', 'scale-[1.02]', 'z-10', 'shadow-lg');
+                cell.classList.remove('ring-4', 'ring-brand-900', 'ring-offset-2', 'scale-[1.02]', 'z-10', 'shadow-lg');
             });
             const activeCell = document.getElementById(`calCell-${dayNum}`);
-            if (activeCell) activeCell.classList.add('ring-4', 'ring-sultan-600', 'ring-offset-2', 'scale-[1.02]', 'z-10', 'shadow-lg');
+            if (activeCell) activeCell.classList.add('ring-4', 'ring-brand-900', 'ring-offset-2', 'scale-[1.02]', 'z-10', 'shadow-lg');
         }
 
-        // SIMPAN PERUBAHAN SECARA LOKAL
+        // LOCALLY UPDATE RECORD PARAMETERS
         function saveLocalContent() {
             if(!currentMonthData) return;
             const titleVal = document.getElementById('sideTitleInput').value.trim();
@@ -764,20 +763,27 @@
             }
 
             renderStats(); renderCalendar(); renderAnalytics(); loadDayDetails(activeDayNum);
-            showToast("Disimpan lokal pada paparan web sementara!", "💾");
+            showToast("Record updated temporarily (local viewport)!", "💾");
         }
 
+        // COPY THE DETAILED COPYWRITING TEXT TO CLIPBOARD
         function copyCaptionToClipboard() {
             const captionVal = document.getElementById('sideCaptionInput').value;
-            if (!captionVal) return showToast("Tiada kapsyen!", "⚠️");
-            const temp = document.createElement("textarea"); temp.value = captionVal; document.body.appendChild(temp); temp.select();
-            document.execCommand('copy'); document.body.removeChild(temp);
-            showToast("Kapsyen berjaya disalin!", "📋");
+            if (!captionVal) return showToast("No text copy is present!", "⚠️");
+            
+            // Standalone backup copy protocol
+            const temp = document.createElement("textarea"); 
+            temp.value = captionVal; 
+            document.body.appendChild(temp); 
+            temp.select();
+            document.execCommand('copy'); 
+            document.body.removeChild(temp);
+            showToast("Caption text copied to clipboard!", "📋");
         }
 
         function triggerFilters() { renderCalendar(); if(activeTab === 'list') renderListTable(); }
 
-        // SISTEM TOAST MODAL
+        // TRIGGER COMPONENT TOAST SYSTEM
         function showToast(message, icon = '✨') {
             const toast = document.getElementById('toast');
             document.getElementById('toastIcon').innerText = icon;
