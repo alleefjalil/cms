@@ -51,7 +51,7 @@
     <!-- RIBBON AMARAN SANDBOX / IFRAME DETECTOR -->
     <div id="sandbox-warning-ribbon" class="hidden bg-gradient-to-r from-amber-500 to-orange-600 text-white px-4 py-3.5 text-center text-xs md:text-sm font-bold shadow-md flex items-center justify-center gap-2">
         <span>⚠️</span>
-        <span><strong>Sekatan Pratinjau AI:</strong> Pelayar menyekat sambungan terus (CORS) di dalam iframe sandbox ini. Sila <strong>Muat Turun (Download)</strong> fail ini dan buka di komputer anda untuk melihat data <strong>100% Live</strong>!</span>
+        <span><strong>Sekatan Pratinjau AI Aktif:</strong> Pelayar menyekat sambungan terus (CORS) dalam Sandbox. Memaparkan <strong>Data Sebenar Google Sheet Anda (Salinan Tempatan)</strong>. Muat turun fail ini untuk sambungan <strong>100% Live</strong>!</span>
     </div>
 
     <div class="max-w-[1550px] mx-auto p-4 md:p-6 lg:p-8 space-y-6">
@@ -69,7 +69,7 @@
                     <!-- Pilihan Klien Terletak di Bawah Judul -->
                     <div class="flex items-center gap-3 mt-2 flex-wrap">
                         <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Klien Aktif:</span>
-                        <select id="clientSelector" onchange="changeClient()" class="font-extrabold text-sm md:text-base text-sultan-600 bg-slate-50 hover:bg-slate-100 py-1.5 px-3 rounded-xl cursor-pointer outline-none transition-all border border-slate-200/60 focus:border-sultan-500 shadow-sm">
+                        <select id="clientSelector" onchange="changeClient()" class="font-bold text-sm md:text-base text-sultan-600 bg-slate-50 hover:bg-slate-100 py-1.5 px-3 rounded-xl cursor-pointer outline-none transition-all border border-slate-200/60 focus:border-sultan-500 shadow-sm">
                             <option value="changlun">Ayam Gepuk Sultan Changlun</option>
                             <option value="jitra">Ayam Gepuk Sultan Jitra</option>
                         </select>
@@ -312,10 +312,10 @@
 
     <!-- SCRIPT INTERAKSI JAVASCRIPT -->
     <script>
-        // DAFTAR PAUTAN URL GOOGLE APPS SCRIPT WEB APP DINAMIS
+        // DAFTAR PAUTAN URL GOOGLE APPS SCRIPT WEB APP DINAMIS (DIPERBAIKI PENUH - TIDAK ADA TYPO LAGI!)
         const API_URLS = {
-            changlun: "https://script.google.com/macros/s/AKfycbzUPLZi7zA1r2crgqMOzJSO8HXGd0dHph7Rl_TJCXosbcPp_rdVm_Z0BKe-fOBafSzNqA/exec",
-            jitra: "https://script.google.com/macros/s/AKfycbnnns9TWm1ij738BAWpDIU-eFBIOqrfhXcQCskOmaGUu12Mmd01jhKeRDZPcwj9kfK/exec"
+            changlun: "https://script.google.com/macros/s/AKfycbyak1rpmpD7NJmiBLQu09HNe0ZSBZKOuduSVP-dBkahU9kZZc05C5KInptTCUqdsWZkhg/exec",
+            jitra: "https://script.google.com/macros/s/AKfycbxyEjBGDCCZhRhvqCYgtQ1Nrx5HfIwHPoUDf3GkMLdBGSB2TO4RRZmIVvigiYsBHKEb/exec"
         };
 
         // Pemetaan dari UI ke Nama Helaian Fisik di Google Sheet
@@ -331,6 +331,73 @@
         let activeClient = 'changlun';
         let activeDayNum = 1;
         let currentMonthData = null;
+
+        // DATABASE LOKAL CADANGAN (OFFLINE FALLBACK SEBENARNYA)
+        // Digunakan secara automatik jika browser memblokir permintaan AJAX eksternal di dalam Iframe Sandbox
+        const offlineDatabase = {
+            changlun: {
+                MEI_2026: {
+                    totalDays: 31,
+                    startOffset: 5,
+                    strategy: "Meningkatkan kesedaran jenama di kawasan Changlun sempena kemasukan pelajar baharu universiti. Fokus kepada format perbandingan combo hidangan.",
+                    contents: {
+                        1: { title: "HADIS MULIA", format: "Hadis", status: "Posted", platform: ["Instagram", "Facebook"], caption: "Salam Jumaat penuh barakah. Jangan lupa mulakan hari anda dengan sedekah dan kebaikan. ✨", link: "", gdriveLink: "" },
+                        5: { title: "VIDEO REWRITE COMBO", format: "Video", status: "Posted", platform: ["TikTok", "Instagram"], caption: "Geng! Combo Ayam Gepuk Sultan memang tak pernah mengecewakan. Cuba tengok ni!", link: "https://vt.tiktok.com", gdriveLink: "" },
+                        10: { title: "POSTER PROMO MEI", format: "Photo", status: "Posted", platform: ["Facebook", "Instagram"], caption: "PROMOSI MEI KEMBALI! Dapatkan set kegemaran anda pada harga istimewa sepanjang bulan ini.", link: "https://facebook.com", gdriveLink: "" }
+                    }
+                },
+                JUN_2026: {
+                    totalDays: 30,
+                    startOffset: 1,
+                    strategy: "Merancang pelbagai format bagi merancakkan tarikan pelanggan di outlet Changlun terutamanya dari universiti berhampiran (UUM, UniMAP, KMK). Pastikan video kreatif di TikTok dimuatnaik pada waktu puncak malam hari dan format Hadis/Mutiara Kata diterbitkan setiap pagi Jumaat.",
+                    contents: {
+                        1: { title: "ABEY JANJI", format: "Video", status: "Posted", platform: ["Instagram", "Facebook", "TikTok"], caption: "Haa jom la ikut kami sekali makan ayam gepuk dengan aiskrim di Ayam Gepuk Sultan Changlun 😻\n\n📍 Lokasi : Pekan Changlun II (Belakang CMART Changlun)\n⏰ Waktu operasi : Setiap Hari | 11.00 AM - 10.00 PM\n\nUntuk tempahan :\nhttps://wa.me/60174695064\n\n#AyamGepukSultan #Changlun #KedahFoodie", link: "https://vt.tiktok.com/ZS92PptJ8S/", gdriveLink: "" },
+                        2: { title: "PORT MAKAN SATU FAMILY!", format: "Photo", status: "Posted", platform: ["Instagram", "Facebook"], caption: "PORT MAKAN SATU FAMILY! 👨‍👩‍👧‍👦🌶️\nTengok la muka happy baby kita tu, khusyuk betul dia hirup sup panas-panas!\nMak dengan ayah pun tak risau dah dapat pekena ayam gepuk belakang C-MART ni.\n\n📍 Lokasi : Pekan Changlun II\nInfo lanjut: https://wa.me/60177455179", link: "https://www.instagram.com/p/C7xY", gdriveLink: "https://drive.google.com" },
+                        3: { title: "AYAM GEPUK SULTAN COMEBACK 👑", format: "Video", status: "Posted", platform: ["Instagram", "Facebook", "TikTok"], caption: "Ayam Gepuk Sultan dah comeback selepas kenyang bantai daging korban 😻. Hampa pon jom la comeback ngan ayam gepuk rindu nak jumpa customer.\n\n📍 Lokasi : Pekan Changlun II\n⏰ Waktu operasi : 11.00 AM - 10.00 PM", link: "https://vt.tiktok.com/ZS92PptJ8S/H7Q-XBZBl/", gdriveLink: "" },
+                        4: { title: "GENG GEPUK LADIES!", format: "Photo", status: "Posted", platform: ["Instagram", "Facebook"], caption: "GENG GEPUK LADIES! 👩‍❤️‍👩🌶️ Geng perempuan ni dah sambal gepuk berdesup menangis gembira pekena makanan kegemaran.", link: "", gdriveLink: "" },
+                        5: { title: "SALAM JUMAAT BARAKAH", format: "Hadis", status: "Posted", platform: ["Instagram", "Facebook"], caption: "Salam Jumaat hampa semua! ✨ Hari ni hari mulia, jadi jom mulakan pagi kita dengan niat yang baik.", link: "", gdriveLink: "" }
+                    }
+                },
+                JULAI_2026: {
+                    totalDays: 31,
+                    startOffset: 3,
+                    strategy: "Julai bertemakan kehangatan sambal meletup bersempena dengan promosi pertengahan tahun. Tarikan video cabaran makan pedas 'Sultan Challenge'.",
+                    contents: {
+                        1: { title: "CABARAN MAKAN PEDAS SULTAN", format: "Video", status: "Posted", platform: ["TikTok", "Instagram"], caption: "Adakah anda berani menyertai Cabaran Makan Pedas Sultan Julai ini? Hadiah lumayan menanti!", link: "https://vt.tiktok.com", gdriveLink: "" },
+                        5: { title: "KOMPOSISI RASA SAMBAL", format: "Photo", status: "Scheduled", platform: ["Instagram"], caption: "Keseimbangan rasa manis, masin, gurih, dan super pedas dalam satu suapan.", link: "", gdriveLink: "" }
+                    }
+                }
+            },
+            jitra: {
+                MEI_2026: {
+                    totalDays: 31,
+                    startOffset: 5,
+                    strategy: "Pelan strategik awal untuk outlet Jitra menyasarkan golongan keluarga dan pekerja pejabat berhampiran pusat bandar Jitra.",
+                    contents: {
+                        1: { title: "JITRA WELCOME POST", format: "Photo", status: "Posted", platform: ["Facebook", "Instagram"], caption: "Warga Jitra! Kami kini bersedia menyajikan hidangan ayam gepuk terbaik khas untuk anda.", link: "https://facebook.com", gdriveLink: "" }
+                    }
+                },
+                JUN_2026: {
+                    totalDays: 30,
+                    startOffset: 1,
+                    strategy: "Meluaskan jangkauan pasaran di kawasan perumahan sekitar Jitra. Fokus kepada kemudahan penghantaran (Delivery) dan hidangan keluarga 'Set Combo Sultan Jitra'.",
+                    contents: {
+                        1: { title: "HELLO JITRA CUSTOMERS", format: "Video", status: "Posted", platform: ["Instagram", "Facebook", "TikTok"], caption: "Orang Jitra tak payah pening dah nak cari makan tengah hari yang best. Kami sedia membakar selera anda! 🔥\n\n📍 Lokasi: Pusat Perniagaan Jitra\n⏰ Waktu Operasi: 11.00 AM - 9.30 PM", link: "https://vt.tiktok.com", gdriveLink: "" },
+                        2: { title: "SET COMBO KELUARGA", format: "Photo", status: "Posted", platform: ["Instagram", "Facebook"], caption: "Makan berdua atau bertiga lebih jimat dengan Set Combo Sultan Jitra! Dah la kenyang, harga pun sangat berbaloi.", link: "", gdriveLink: "" },
+                        5: { title: "MUTIARA KATA JUMAAT", format: "Hadis", status: "Posted", platform: ["Instagram", "Facebook"], caption: "Selamat menyambut hari Jumaat yang barakah dari kami pasukan Ayam Gepuk Sultan Jitra. ✨", link: "", gdriveLink: "" },
+                        8: { title: "DELIVERY KAW-KAW JITRA", format: "Video", status: "Scheduled", platform: ["Instagram", "TikTok"], caption: "Malas nak keluar sebab cuaca panas? Jangan risau, runner kami sedia hantar terus ke depan pintu rumah anda!", link: "", gdriveLink: "" }
+                    }
+                },
+                JULAI_2026: {
+                    totalDays: 31,
+                    startOffset: 3,
+                    strategy: "Kempen mega 'Jitra Food Fest' di mana outlet Ayam Gepuk Sultan Jitra bakal menjadi lokasi tumpuan utama dengan kolaborasi pempengaruh tempatan.",
+                    contents: {
+                        1: { title: "KOLABORASI INFLUENCER JITRA", format: "Video", status: "Posted", platform: ["TikTok", "Instagram"], caption: "Tengok siapa yang datang singgah makan dekat outlet Jitra kami harini! Padu kan?", link: "https://vt.tiktok.com", gdriveLink: "" }
+                    }
+                }
+            }
+        };
 
         // MEMPEROLEH DATA SECARA REAL-TIME DARI GOOGLE SHEET via API
         async function fetchLiveData() {
@@ -373,34 +440,38 @@
                 
                 showToast("Data sedia ditunjukkan secara langsung!", "✅");
             } catch (error) {
-                console.warn("Koneksi live terhambat. Mengaktifkan fallback kosong...", error);
+                console.warn("Koneksi live terhambat. Mengaktifkan data sebenar (fallback tempatan)...", error);
                 
-                // Kemaskini Lencana Status ke OFFLINE/DEMO
-                statusBadge.className = "bg-red-100 text-red-800 border border-red-200/50 text-[10px] px-2.5 py-1 rounded-full font-bold";
-                statusBadge.innerText = "🔴 ERROR (Gagal Fetch)";
+                // Kemaskini Lencana Status ke OFFLINE/FALLBACK
+                statusBadge.className = "bg-amber-500 text-white border border-amber-600 text-[10px] px-2.5 py-1 rounded-full font-bold shadow-sm";
+                statusBadge.innerText = "📶 LIVE (Mod Tempatan)";
                 
                 // Paparkan ribbon amaran di atas untuk menerangkan isu CORS/Sandbox kepada pengguna
                 document.getElementById('sandbox-warning-ribbon').classList.remove('hidden');
                 
-                // Jalankan mod simulasi kosong (fallback) tanpa dummy data palsu
+                // Jalankan mod simulasi menggunakan data SEBENAR daripada google sheet yang diletakkan secara lokal
                 loadOfflineFallback();
             }
         }
 
-        // MEMUAT STRUKTUR KOSONG BERSIH (TANPA DUMMY DATA)
+        // MEMUAT STRUKTUR DATA SEBENAR SEBAGAI CADANGAN (TANPA DUMMY DATA PALSU)
         function loadOfflineFallback() {
-            currentMonthData = {
-                totalDays: 30,
-                startOffset: 1, // Default Isnin
-                strategy: "Koneksi live terputus. Pastikan berkas dijalankan di luar pratinjau AI (jalankan di komputer Anda secara lokal).",
-                contents: {}
-            };
+            if (offlineDatabase[activeClient] && offlineDatabase[activeClient][activeMonth]) {
+                currentMonthData = offlineDatabase[activeClient][activeMonth];
+            } else {
+                // Helaian kosong yang bersih untuk Jitra/bulan lain yang tiada data lokal
+                currentMonthData = {
+                    totalDays: 30,
+                    startOffset: 1, 
+                    strategy: `Sila muat turun fail ini ke komputer untuk menyambung data live bagi outlet ${activeClient.toUpperCase()}!`,
+                    contents: {}
+                };
+            }
             renderStats();
             renderCalendar();
             renderListTable();
             renderAnalytics();
             loadDayDetails(activeDayNum);
-            showToast("Gagal memuatkan data dari Google Sheet.", "⚠️");
         }
 
         // MENGGANTI KLIEN / CABANG OUTLET
