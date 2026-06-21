@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RenCreative - Content Management System</title>
+    <!-- Google Fonts: Plus Jakarta Sans untuk tipografi korporat yang bersih dan jelas -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS untuk susun atur visual premium -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        sultan: {
+                            50: '#fff7ed',
+                            100: '#ffedd5',
+                            500: '#f97316',
+                            600: '#ea580c',
+                            700: '#c2410c',
+                            800: '#9a3412',
+                            900: '#7c2d12',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Gaya scrollbar kustom untuk estetika UI */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f8fafc; }
+        ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 6px; }
+        ::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+    </style>
+</head>
+<body class="bg-[#f8fafc] text-slate-800 min-h-screen font-sans antialiased selection:bg-sultan-100 selection:text-sultan-900">
+
+    <!-- SISTEM NOTIFIKASI TOAST -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 pointer-events-none transition-all duration-300 ease-out bg-slate-900 text-white px-5 py-3.5 rounded-xl shadow-2xl flex items-center gap-3 border border-slate-800">
+        <span id="toastIcon" class="text-base">✨</span>
+        <span id="toastMessage" class="text-xs md:text-sm font-semibold">Sistem siap digunakan!</span>
+    </div>
+
+    <!-- RIBBON DETEKTIF SANDBOX IFRAME -->
+    <div id="sandbox-warning-ribbon" class="hidden bg-gradient-to-r from-amber-500 to-orange-600 text-white px-4 py-3.5 text-center text-xs md:text-sm font-bold shadow-md flex items-center justify-center gap-2">
+        <span>⚠️</span>
+        <span><strong>Sekatan Pratinjau AI:</strong> Pelayar menyekat sambungan terus (CORS) di dalam iframe sandbox ini. Sila <strong>Muat Turun (Download)</strong> fail ini dan buka di komputer anda untuk melihat data <strong>100% Live</strong>!</span>
+    </div>
+
+    <div class="max-w-[1550px] mx-auto p-4 md:p-6 lg:p-8 space-y-6">
+
+        <!-- HEADER UTAMA -->
+        <header class="bg-white rounded-2xl p-5 md:p-6 border border-slate-100 shadow-sm flex flex-col lg:flex-row justify-between items-start lg:items-center gap-5">
+            <div class="flex items-center gap-4">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-sultan-600 to-amber-500 flex items-center justify-center text-white font-extrabold text-2xl shadow-lg shadow-sultan-500/20 flex-shrink-0">
+                    R
+                </div>
+                <div>
+                    <!-- Judul Besar Baru -->
+                    <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">RenCreative Content Management</h1>
+                    
+                    <!-- Pilihan Klien Terletak di Bawah Judul -->
+                    <div class="flex items-center gap-3 mt-2 flex-wrap">
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Klien Aktif:</span>
+                        <select id="clientSelector" onchange="changeClient()" class="font-extrabold text-sm md:text-base text-sultan-600 bg-slate-50 hover:bg-slate-100 py-1.5 px-3 rounded-xl cursor-pointer outline-none transition-all border border-slate-200/60 focus:border-sultan-500 shadow-sm">
+                            <option value="changlun">Ayam Gepuk Sultan Changlun</option>
+                            <option value="jitra">Ayam Gepuk Sultan Jitra</option>
+                        </select>
+                        <!-- Status Koneksi Dinamis -->
+                        <span id="connectionStatus" class="bg-amber-100 text-amber-800 border border-amber-200/50 text-[10px] px-2.5 py-1.5 rounded-full font-bold transition-all duration-300 animate-pulse">🔄 Menghubungkan...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Menu Tab Kontrol Premium -->
+            <div class="flex bg-slate-100/80 p-1.5 rounded-xl border border-slate-200/30 w-full lg:w-auto overflow-x-auto shadow-inner">
+                <button onclick="switchTab('calendar')" id="tabBtn-calendar" class="tab-btn flex items-center justify-center gap-2 px-5 py-2.5 text-xs md:text-sm font-bold rounded-lg transition-all text-sultan-600 bg-white shadow-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    Kalender
+                </button>
+                <button onclick="switchTab('list')" id="tabBtn-list" class="tab-btn flex items-center justify-center gap-2 px-5 py-2.5 text-xs md:text-sm font-bold rounded-lg transition-all text-slate-500 hover:text-slate-800">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
+                    Daftar Jadwal
+                </button>
+                <button onclick="switchTab('analytics')" id="tabBtn-analytics" class="tab-btn flex items-center justify-center gap-2 px-5 py-2.5 text-xs md:text-sm font-bold rounded-lg transition-all text-slate-500 hover:text-slate-800">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                    Analisis Dampak
+                </button>
+            </div>
+        </header>
+
+        <!-- PENYARING & BAR PILIHAN BULAN -->
+        <section class="space-y-4">
+            <!-- Pilihan Bulan -->
+            <div class="bg-amber-50/40 border border-amber-100 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div class="flex items-center gap-2.5 text-amber-900 text-xs md:text-sm font-extrabold tracking-wider">
+                    <span class="p-1.5 bg-amber-100 text-amber-700 rounded-lg">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    </span>
+                    PILIH BULAN PERANCANGAN:
+                </div>
+                <div class="flex gap-2 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
+                    <button onclick="changeMonth('MEI_2026')" id="monthBtn-MEI_2026" class="month-btn px-4.5 py-2 rounded-xl text-xs font-bold transition-all bg-white border border-slate-200 text-slate-700 hover:bg-slate-50">
+                        MEI 2026
+                    </button>
+                    <button onclick="changeMonth('JUN_2026')" id="monthBtn-JUN_2026" class="month-btn px-4.5 py-2 rounded-xl text-xs font-extrabold transition-all bg-sultan-600 text-white shadow-lg shadow-sultan-600/15 flex items-center gap-1.5 border border-sultan-600">
+                        JUN 2026 <span class="bg-red-600 text-[8px] text-white px-1.5 py-0.5 rounded-full animate-pulse font-black">LIVE</span>
+                    </button>
+                    <button onclick="changeMonth('JULAI_2026')" id="monthBtn-JULAI_2026" class="month-btn px-4.5 py-2 rounded-xl text-xs font-bold transition-all bg-white border border-slate-200 text-slate-700 hover:bg-slate-50">
+                        JULI 2026
+                    </button>
+                </div>
+            </div>
+
+            <!-- Pencarian & Tapis Cepat -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+                <div class="md:col-span-2 relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </span>
+                    <input type="text" id="searchInput" onkeyup="triggerFilters()" placeholder="Cari judul, keterangan, platform..." class="w-full bg-white border border-slate-200 rounded-xl py-3 pl-10 pr-4 text-sm font-medium placeholder-slate-400 outline-none focus:border-sultan-500 focus:ring-2 focus:ring-sultan-500/10 transition-all shadow-sm">
+                </div>
+                <div>
+                    <select id="formatFilter" onchange="triggerFilters()" class="w-full bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-semibold cursor-pointer outline-none focus:border-sultan-500 transition-all shadow-sm">
+                        <option value="all">📁 Semua Format</option>
+                        <option value="Video">🎥 Video</option>
+                        <option value="Photo">📸 Photo</option>
+                        <option value="Hadis">📖 Hadis</option>
+                        <option value="Review">⭐ Ulasan/Review</option>
+                    </select>
+                </div>
+                <div>
+                    <select id="statusFilter" onchange="triggerFilters()" class="w-full bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-semibold cursor-pointer outline-none focus:border-sultan-500 transition-all shadow-sm">
+                        <option value="all">🟢 Semua Status</option>
+                        <option value="Posted">Posted</option>
+                        <option value="Scheduled">Scheduled</option>
+                        <option value="Belum Ditetapkan">Belum Ditentukan</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <!-- KARTU STATISTIK UTAMA -->
+        <section class="grid grid-cols-2 lg:grid-cols-5 gap-4">
+            <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm flex items-center gap-4">
+                <div class="w-11 h-11 rounded-xl bg-orange-50 text-sultan-600 flex items-center justify-center text-xl font-bold">📅</div>
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Rencana Bulan</p>
+                    <h3 id="statTotalDays" class="text-base md:text-lg font-extrabold text-slate-900 mt-0.5">30 Hari</h3>
+                </div>
+            </div>
+            <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm flex items-center gap-4">
+                <div class="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl font-bold">✔️</div>
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Posted</p>
+                    <h3 id="statPosted" class="text-base md:text-lg font-extrabold text-slate-900 mt-0.5">0 Publikasi</h3>
+                </div>
+            </div>
+            <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm flex items-center gap-4">
+                <div class="w-11 h-11 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl font-bold">🕒</div>
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Scheduled</p>
+                    <h3 id="statScheduled" class="text-base md:text-lg font-extrabold text-slate-900 mt-0.5">0 Publikasi</h3>
+                </div>
+            </div>
+            <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm flex items-center gap-4">
+                <div class="w-11 h-11 rounded-xl bg-slate-50 text-slate-600 flex items-center justify-center text-xl font-bold">📄</div>
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Belum Tetap</p>
+                    <h3 id="statDraft" class="text-base md:text-lg font-extrabold text-slate-900 mt-0.5">0 Publikasi</h3>
+                </div>
+            </div>
+            <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm col-span-2 lg:col-span-1 flex flex-col justify-between">
+                <div class="flex justify-between items-center">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Tingkat Penyelesaian</p>
+                    <span id="statRateText" class="text-xs font-extrabold text-sultan-600 bg-sultan-50 px-2 py-0.5 rounded-md">0%</span>
+                </div>
+                <div class="w-full bg-slate-100 rounded-full h-2 mt-2 overflow-hidden shadow-inner">
+                    <div id="statRateBar" class="bg-gradient-to-r from-sultan-500 to-amber-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AREA KERJA UTAMA -->
+        <main class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            <!-- Sisi Kiri (Tampilan Tab Utama) -->
+            <section class="lg:col-span-8 space-y-6">
+                
+                <!-- TAB 1: KALENDER -->
+                <div id="tabContent-calendar" class="tab-panel bg-white rounded-2xl p-5 border border-slate-100 shadow-sm space-y-5">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                        <h3 class="text-base font-extrabold text-slate-900">
+                            📅 Kalender Perencana &mdash; <span id="calendarMonthTitle" class="text-sultan-600">JUN 2026</span>
+                        </h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <div class="min-w-[750px] space-y-2">
+                            <div class="grid grid-cols-7 gap-2 text-center text-[11px] font-extrabold text-slate-400 uppercase tracking-widest border-b border-slate-100 pb-2">
+                                <div>Ahad</div><div>Isnin</div><div>Selasa</div><div>Rabu</div><div>Khamis</div><div>Jumaat</div><div>Sabtu</div>
+                            </div>
+                            <div id="calendarDaysGrid" class="grid grid-cols-7 gap-2.5"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: DAFTAR JADWAL -->
+                <div id="tabContent-list" class="tab-panel hidden bg-white rounded-2xl p-5 border border-slate-100 shadow-sm space-y-5">
+                    <div class="flex justify-between items-center pb-2 border-b border-slate-50">
+                        <h3 class="text-base font-extrabold text-slate-900">
+                            📋 Senarai Perancangan Penuh (<span id="listMonthTitle" class="text-sultan-600">JUN 2026</span>)
+                        </h3>
+                        <span id="listRecordCount" class="bg-slate-100 text-slate-700 text-[11px] px-3 py-1 rounded-full font-bold">0 Data</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse min-w-[700px]">
+                            <thead>
+                                <tr class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider border-b border-slate-100">
+                                    <th class="py-3 px-4 w-[15%]">Tarikh</th>
+                                    <th class="py-3 px-4 w-[15%]">Format</th>
+                                    <th class="py-3 px-4">Tajuk / Rangka Kandungan</th>
+                                    <th class="py-3 px-4 w-[15%]">Status</th>
+                                    <th class="py-3 px-4 w-[20%]">Platform</th>
+                                    <th class="py-3 px-4 text-right w-[10%]">Pautan</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listTableBody" class="divide-y divide-slate-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB 3: ANALISIS DAMPAK -->
+                <div id="tabContent-analytics" class="tab-panel hidden space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm space-y-5">
+                            <h3 class="text-sm font-extrabold text-slate-900 border-b border-slate-50 pb-2">🔗 Saluran Platform Edaran (<span id="platformMonthTitle">JUN 2026</span>)</h3>
+                            <div class="space-y-4" id="platformAnalyticsList"></div>
+                        </div>
+                        <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm space-y-5">
+                            <h3 class="text-sm font-extrabold text-slate-900 border-b border-slate-50 pb-2">✨ Distribusi Format Kandungan (<span id="formatMonthTitle">JUN 2026</span>)</h3>
+                            <div class="space-y-4" id="formatAnalyticsList"></div>
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-r from-sultan-600 to-amber-500 rounded-3xl p-6 text-white shadow-lg flex items-start gap-5">
+                        <div class="text-2xl">📈</div>
+                        <div class="space-y-1">
+                            <h4 class="font-extrabold text-base tracking-wide">Strategi Konten &mdash; <span id="strategyMonthTitle">JUN 2026</span></h4>
+                            <p id="strategyContentText" class="text-xs md:text-sm text-white/90 leading-relaxed font-semibold"></p>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- Bahagian Kanan (Bilah Sisi Detail Konten) -->
+            <section class="lg:col-span-4 bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden flex flex-col">
+                <div class="bg-slate-900 text-white p-5">
+                    <p class="text-[10px] font-extrabold uppercase text-amber-500 tracking-widest">Detail Konten (<span id="sideMonthTitle">JUN 2026</span>)</p>
+                    <h3 id="sideDate" class="text-xl font-extrabold mt-1 tracking-tight">1 Jun 2026</h3>
+                    <p id="sideDayName" class="text-xs text-slate-400 mt-1 font-medium">Hari: Isnin</p>
+                </div>
+                <div class="p-5 space-y-5 flex-1 bg-white">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100"><span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest block">Format</span><div id="sideFormat" class="text-xs md:text-sm font-extrabold text-slate-800 mt-1">-</div></div>
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100"><span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest block">Status Siaran</span><div id="sideStatus" class="mt-1">-</div></div>
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Tajuk Kandungan</label>
+                        <input type="text" id="sideTitleInput" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs md:text-sm font-bold text-slate-800 outline-none focus:border-sultan-500 focus:bg-white transition-all">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Platform Sasaran</label>
+                        <div class="flex flex-wrap gap-1.5" id="sidePlatforms">-</div>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center">
+                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Salinan Kapsyen</label>
+                            <button onclick="copyCaptionToClipboard()" class="text-xs font-extrabold text-sultan-600 flex items-center gap-1.5 font-sans">📋 Salin Kapsyen</button>
+                        </div>
+                        <textarea id="sideCaptionInput" class="w-full min-h-[140px] max-h-[220px] bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-xs text-slate-700 font-medium outline-none focus:border-sultan-500 focus:bg-white transition-all resize-y"></textarea>
+                    </div>
+                    <div id="sideLinkContainer" class="hidden">
+                        <a id="sideLink" href="#" target="_blank" class="w-full bg-emerald-50 hover:bg-emerald-100 border border-emerald-100 text-emerald-800 rounded-xl py-2.5 text-center text-xs font-bold transition-all flex items-center justify-center gap-2">🔗 Tonton Hasil Siaran</a>
+                    </div>
+                    <div id="sideGDriveContainer" class="hidden">
+                        <a id="sideGDriveLink" href="#" target="_blank" class="w-full bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900 rounded-xl py-2.5 text-center text-xs font-bold transition-all flex items-center justify-center gap-2">📁 Buka Bahan GDrive</a>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex gap-2">
+                        <div class="w-1/2">
+                            <label class="text-[9px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Perbarui Status</label>
+                            <select id="sideStatusSelect" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-xs font-bold text-slate-700 outline-none">
+                                <option value="Posted">Posted</option>
+                                <option value="Scheduled">Scheduled</option>
+                                <option value="Belum Ditetapkan">Draf/KIV</option>
+                            </select>
+                        </div>
+                        <div class="w-1/2 flex items-end">
+                            <button onclick="saveLocalContent()" class="w-full bg-sultan-600 hover:bg-sultan-700 text-white font-extrabold text-xs py-2.5 rounded-lg shadow-md shadow-sultan-600/10 flex items-center justify-center gap-1.5">Simpan</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- SCRIPT INTERAKSI JAVASCRIPT -->
+    <script>
+        // DAFTAR PAUTAN URL GOOGLE APPS SCRIPT WEB APP DINAMIS (KINI DIPERBAIKI DENGAN STRUKTUR PINTAR)
+        const API_URLS = {
+            changlun: "https://script.google.com/macros/s/AKfycbzUPLZi7zA1r2crgqMOzJSO8HXGd0dHph7Rl_TJCXosbcPp_rdVm_Z0BKe-fOBafSzNqA/exec",
+            jitra: "https://script.google.com/macros/s/AKfycbxnnns9TWm1ij738BAWpDIU-eFBIOqrfhXcQCskOmaGUu12Mmd01jhKeRDZPcwj9kfK/exec"
+        };
+
+        // Pemetaan dari UI ke Nama Helaian Fisik di Google Sheet
+        const sheetTabMappings = {
+            MEI_2026: "mei 2026",
+            JUN_2026: "JUN 2026",
+            JULAI_2026: "july 2026"
+        };
+
+        let activeTab = 'calendar';
+        let activeMonth = 'JUN_2026'; // Kunci UI Aktif
+        let activeSheetTabName = 'JUN 2026'; // Nama fisik tab Google Sheet
+        let activeClient = 'changlun';
+        let activeDayNum = 1;
+        let currentMonthData = null;
+
+        // DATABASE LOKAL CADANGAN (OFFLINE FALLBACK)
+        // Digunakan secara automatik jika browser memblokir permintaan AJAX eksternal di dalam Iframe Sandbox
+        const offlineDatabase = {
+            changlun: {
+                MEI_2026: {
+                    totalDays: 31,
+                    startOffset: 5,
+                    strategy: "Meningkatkan kesedaran jenama di kawasan Changlun sempena kemasukan pelajar baharu universiti. Fokus kepada format perbandingan combo hidangan.",
+                    contents: {
+                        1: { title: "HADIS MULIA", format: "Hadis", status: "Posted", platform: ["Instagram", "Facebook"], caption: "Salam Jumaat penuh barakah. Jangan lupa mulakan hari anda dengan sedekah dan kebaikan. ✨", link: "", gdriveLink: "" },
+                        5: { title: "VIDEO REWRITE COMBO", format: "Video", status: "Posted", platform: ["TikTok", "Instagram"], caption: "Geng! Combo Ayam Gepuk Sultan memang tak pernah mengecewakan. Cuba tengok ni!", link: "https://vt.tiktok.com", gdriveLink: "" },
+                        10: { title: "POSTER PROMO MEI", format: "Photo", status: "Posted", platform: ["Facebook", "Instagram"], caption: "PROMOSI MEI KEMBALI! Dapatkan set kegemaran anda pada harga istimewa sepanjang bulan ini.", link: "https://facebook.com", gdriveLink: "" }
+                    }
+                },
+                JUN_2026: {
+                    totalDays: 30,
+                    startOffset: 1,
+                    strategy: "Merancang pelbagai format bagi merancakkan tarikan pelanggan di outlet Changlun terutamanya dari universiti berhampiran (UUM, UniMAP, KMK). Pastikan video kreatif di TikTok dimuatnaik pada waktu puncak malam hari dan format Hadis/Mutiara Kata diterbitkan setiap pagi Jumaat.",
+                    contents: {
+                        1: { title: "ABEY JANJI", format: "Video", status: "Posted", platform: ["Instagram", "Facebook", "TikTok"], caption: "Haa jom la ikut kami sekali makan ayam gepuk dengan aiskrim di Ayam Gepuk Sultan Changlun 😻\n\n📍 Lokasi : Pekan Changlun II (Belakang CMART Changlun)\n⏰ Waktu operasi : Setiap Hari | 11.00 AM - 10.00 PM\n\nUntuk tempahan :\nhttps://wa.me/60174695064\n\n#AyamGepukSultan #Changlun #KedahFoodie", link: "https://vt.tiktok.com/ZS92PptJ8S/", gdriveLink: "" },
+                        2: { title: "PORT MAKAN SATU FAMILY!", format: "Photo", status: "Posted", platform: ["Instagram", "Facebook"], caption: "PORT MAKAN SATU FAMILY! 👨‍👩‍👧‍👦🌶️\nTengok la muka happy baby kita tu, khusyuk betul dia hirup sup panas-panas!\nMak dengan ayah pun tak risau dah dapat pekena ayam gepuk belakang C-MART ni.\n\n📍 Lokasi : Pekan Changlun II\nInfo lanjut: https://wa.me/60177455179", link: "", gdriveLink: "https://drive.google.com" },
+                        3: { title: "AYAM GEPUK SULTAN COMEBACK 👑", format: "Video", status: "Posted", platform: ["Instagram", "Facebook", "TikTok"], caption: "Ayam Gepuk Sultan dah comeback selepas kenyang bantai daging korban 😻. Hampa pon jom la comeback ngan ayam gepuk rindu nak jumpa customer.\n\n📍 Lokasi : Pekan Changlun II\n⏰ Waktu operasi : 11.00 AM - 10.00 PM", link: "https://vt.tiktok.com/ZS92PptJ8S/H7Q-XBZBl/", gdriveLink: "" },
+                        4: { title: "GENG GEPUK LADIES!", format: "Photo", status: "Posted", platform: ["Instagram", "Facebook"], caption: "GENG GEPUK LADIES! 👩‍❤️‍👩🌶️ Geng perempuan ni dah sambal gepuk berdesup menangis gembira pekena makanan kegemaran.", link: "", gdriveLink: "" },
+                        5: { title: "SALAM JUMAAT BARAKAH", format: "Hadis", status: "Posted", platform: ["Instagram", "Facebook"], caption: "Salam Jumaat hampa semua! ✨ Hari ni hari mulia, jadi jom mulakan pagi kita dengan niat yang baik.", link: "", gdriveLink: "" },
+                        6: { title: "BILA CUSTOMER REFILL LEBIH 6X SAMBAL", format: "Video", status: "Posted", platform: ["Instagram", "Facebook", "TikTok"], caption: "Aih nampak gaya sedap betul ye sampai tambah sambal 6 kali tu! Mantap abang kita ni tahan pedas. 🔥", link: "https://vt.tiktok.com", gdriveLink: "" },
+                        7: { title: "STAF KAMI DAH READY!", format: "Photo", status: "Posted", platform: ["Instagram", "Facebook"], caption: "KAMI DAH READY! 👨‍🍳🔥 Staf kami semua dah ready nak sediakan gepuk paling berdesup untuk anda tengah hari ni.", link: "", gdriveLink: "" },
+                        8: { title: "CUSTOMER MINTAK TAMBAH SAMBAL", format: "Video", status: "Posted", platform: ["Instagram", "Facebook", "TikTok"], caption: "Bukan min tak bagi tambah, tapi risau esok pagi takut perut menyanyi dangdut pula. Tapi kalau nak juga, kami layan! 😉", link: "https://vt.tiktok.com", gdriveLink: "" },
+                        9: { title: "SAMBAL SEGAR SETIAP HARI", format: "Photo", status: "Scheduled", platform: ["Instagram", "Facebook"], caption: "Rasa padu sambal gepuk sultan yang dimasak segar setiap hari. Rasa sekali pasti teringat selalu.", link: "", gdriveLink: "" },
+                        10: { title: "TENGAH SHOPPING KE TU?", format: "Video", status: "Posted", platform: ["Instagram", "Facebook", "TikTok"], caption: "Lepas lelah shopping dekat CMART tu, singgah jap belakang kedai kami. Pekena ayam gepuk panas-panas konfirm hilang penat!", link: "https://vt.tiktok.com", gdriveLink: "" },
+                        11: { title: "GABUNGAN TERBAIK GEPUK", format: "Photo", status: "Scheduled", platform: ["Instagram", "Facebook"], caption: "Nasi putih panas, ayam crispy garing, sambal pedas menyengat. Gabungan terbaik dunia!", link: "", gdriveLink: "" },
+                        12: { title: "DOA HARI JUMAAT", format: "Hadis", status: "Posted", platform: ["Instagram", "Facebook"], caption: "Keberkatan pagi hari bermula dengan doa dan syukur. Jumaat barakah untuk semua pelanggan Ayam Gepuk Sultan.", link: "", gdriveLink: "" },
+                        13: { title: "STAF KICAW TERPADU", format: "Video", status: "Posted", platform: ["Instagram", "Facebook", "TikTok"], caption: "Tengok skill staf kami kacau sambal. Penuh kasih sayang dan ketelitian!", link: "https://vt.tiktok.com", gdriveLink: "" },
+                        14: { title: "LEVEL SULTAN SEJATI", format: "Photo", status: "Scheduled", platform: ["Instagram", "Facebook"], caption: "Dah cuba tahap pedas Level Sultan? Kalau belum, hampa belum dikira geng sejati!", link: "", gdriveLink: "" },
+                        15: { title: "JENIS-JENIS CUSTOMER", format: "Video", status: "Posted", platform: ["Instagram", "Facebook", "TikTok"], caption: "Hampa jenis yang mana satu bila makan sambal? Jenis nangis senyap-senyap ke jenis minum air sedenjak? 😂", link: "https://vt.tiktok.com", gdriveLink: "" },
+                        16: { title: "MAKAN RAMAI-RAMAI MERIAH", format: "Photo", status: "Scheduled", platform: ["Instagram", "Facebook"], caption: "Bawa kawan-kawan ofis datang sini. Makan ramai-ramai baru meriah!", link: "", gdriveLink: "" },
+                        17: { title: "KENA KACAU DENGAN MEMBER", format: "Video", status: "Posted", platform: ["Instagram", "Facebook", "TikTok"], caption: "Bila tengah khusyuk makan pastu member datang pau kulit ayam garing... rasa nak nangis tau! 😭", link: "https://vt.tiktok.com", gdriveLink: "" },
+                        18: { title: "TEASER SET COMBO BARU", format: "Photo", status: "Belum Ditetapkan", platform: ["Instagram", "Facebook"], caption: "Draf gambar set hidangan combo baharu.", link: "", gdriveLink: "" },
+                        19: { title: "MUTIARA PAGI JUMAAT", format: "Hadis", status: "Posted", platform: ["Instagram", "Facebook"], caption: "Sebutlah Alhamdulillah untuk hari yang hebat ini. Selamat hari Jumaat!", link: "", gdriveLink: "" },
+                        20: { title: "LEKA MAKAN YANG PEDAS", format: "Video", status: "Posted", platform: ["Instagram", "Facebook", "TikTok"], caption: "Khusyuk betul akak ni makan. Pedas pun pedas, janji licin!", link: "https://vt.tiktok.com", gdriveLink: "" }
+                    }
+                },
+                JULAI_2026: {
+                    totalDays: 31,
+                    startOffset: 3,
+                    strategy: "Julai bertemakan kehangatan sambal meletup bersempena dengan promosi pertengahan tahun. Tarikan video cabaran makan pedas 'Sultan Challenge'.",
+                    contents: {
+                        1: { title: "CABARAN MAKAN PEDAS SULTAN", format: "Video", status: "Posted", platform: ["TikTok", "Instagram"], caption: "Adakah anda berani menyertai Cabaran Makan Pedas Sultan Julai ini? Hadiah lumayan menanti!", link: "https://vt.tiktok.com", gdriveLink: "" },
+                        5: { title: "KOMPOSISI RASA SAMBAL", format: "Photo", status: "Scheduled", platform: ["Instagram"], caption: "Keseimbangan rasa manis, masin, gurih, dan super pedas dalam satu suapan.", link: "", gdriveLink: "" }
+                    }
+                }
+            },
+            jitra: {
+                MEI_2026: {
+                    totalDays: 31,
+                    startOffset: 5,
+                    strategy: "Pelan strategik awal untuk outlet Jitra menyasarkan golongan keluarga dan pekerja pejabat berhampiran pusat bandar Jitra.",
+                    contents: {
+                        1: { title: "JITRA WELCOME POST", format: "Photo", status: "Posted", platform: ["Facebook", "Instagram"], caption: "Warga Jitra! Kami kini bersedia menyajikan hidangan ayam gepuk terbaik khas untuk anda.", link: "https://facebook.com", gdriveLink: "" }
+                    }
+                },
+                JUN_2026: {
+                    totalDays: 30,
+                    startOffset: 1,
+                    strategy: "Meluaskan jangkauan pasaran di kawasan perumahan sekitar Jitra. Fokus kepada kemudahan penghantaran (Delivery) dan hidangan keluarga 'Set Combo Sultan Jitra'.",
+                    contents: {
+                        1: { title: "HELLO JITRA CUSTOMERS", format: "Video", status: "Posted", platform: ["Instagram", "Facebook", "TikTok"], caption: "Orang Jitra tak payah pening dah nak cari makan tengah hari yang best. Kami sedia membakar selera anda! 🔥\n\n📍 Lokasi: Pusat Perniagaan Jitra\n⏰ Waktu Operasi: 11.00 AM - 9.30 PM", link: "https://vt.tiktok.com", gdriveLink: "" },
+                        2: { title: "SET COMBO KELUARGA", format: "Photo", status: "Posted", platform: ["Instagram", "Facebook"], caption: "Makan berdua atau bertiga lebih jimat dengan Set Combo Sultan Jitra! Dah la kenyang, harga pun sangat berbaloi.", link: "", gdriveLink: "" },
+                        5: { title: "MUTIARA KATA JUMAAT", format: "Hadis", status: "Posted", platform: ["Instagram", "Facebook"], caption: "Selamat menyambut hari Jumaat yang barakah dari kami pasukan Ayam Gepuk Sultan Jitra. ✨", link: "", gdriveLink: "" },
+                        8: { title: "DELIVERY KAW-KAW JITRA", format: "Video", status: "Scheduled", platform: ["Instagram", "TikTok"], caption: "Malas nak keluar sebab cuaca panas? Jangan risau, runner kami sedia hantar terus ke depan pintu rumah anda!", link: "", gdriveLink: "" }
+                    }
+                },
+                JULAI_2026: {
+                    totalDays: 31,
+                    startOffset: 3,
+                    strategy: "Kempen mega 'Jitra Food Fest' di mana outlet Ayam Gepuk Sultan Jitra bakal menjadi lokasi tumpuan utama dengan kolaborasi pempengaruh tempatan.",
+                    contents: {
+                        1: { title: "KOLABORASI INFLUENCER JITRA", format: "Video", status: "Posted", platform: ["TikTok", "Instagram"], caption: "Tengok siapa yang datang singgah makan dekat outlet Jitra kami harini! Padu kan?", link: "https://vt.tiktok.com", gdriveLink: "" }
+                    }
+                }
+            }
+        };
+
+        // MEMPEROLEH DATA SECARA REAL-TIME DARI GOOGLE SHEET via API
+        async function fetchLiveData() {
+            const statusBadge = document.getElementById('connectionStatus');
+            statusBadge.className = "bg-amber-100 text-amber-800 border border-amber-200/50 text-[10px] px-2.5 py-1 rounded-full font-bold animate-pulse";
+            statusBadge.innerText = "🔄 Menghubungkan...";
+            
+            // Sembunyikan ribbon amaran terlebih dahulu
+            document.getElementById('sandbox-warning-ribbon').classList.add('hidden');
+            
+            try {
+                const apiUrl = API_URLS[activeClient];
+                
+                // Melakukan panggilan Fetch ke Google Web App
+                const response = await fetch(`${apiUrl}?client=${activeClient}&month=${encodeURIComponent(activeSheetTabName)}`);
+                
+                if (!response.ok) {
+                    throw new Error("Respons rangkaian tidak ok.");
+                }
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                
+                // Berjaya mendapatkan data live dari Google Sheet!
+                currentMonthData = data;
+                
+                // Kemaskini Lencana Status ke LIVE
+                statusBadge.className = "bg-emerald-100 text-emerald-800 border border-emerald-200/50 text-[10px] px-2.5 py-1 rounded-full font-bold";
+                statusBadge.innerText = "🟢 LIVE (Google Sheets)";
+                
+                // Perbarui seluruh visual dasbor dengan data terbaru
+                renderStats();
+                renderCalendar();
+                renderListTable();
+                renderAnalytics();
+                loadDayDetails(activeDayNum);
+                
+                showToast("Data sedia ditunjukkan secara langsung!", "✅");
+            } catch (error) {
+                console.warn("Koneksi live dihadang sekuriti Sandbox Iframe. Mengaktifkan database offline cadangan...", error);
+                
+                // Kemaskini Lencana Status ke OFFLINE/DEMO
+                statusBadge.className = "bg-red-100 text-red-800 border border-red-200/50 text-[10px] px-2.5 py-1 rounded-full font-bold";
+                statusBadge.innerText = "🔴 DEMO (Sila download fail)";
+                
+                // Paparkan ribbon amaran di atas untuk menerangkan isu CORS/Sandbox kepada pengguna
+                document.getElementById('sandbox-warning-ribbon').classList.remove('hidden');
+                
+                // Jalankan mod simulasi (fallback) supaya preview di layar tetap berfungsi dengan indah
+                loadOfflineFallback();
+            }
+        }
+
+        // MEMUAT DATA SIMULASI SECARA LOKAL
+        function loadOfflineFallback() {
+            if (offlineDatabase[activeClient] && offlineDatabase[activeClient][activeMonth]) {
+                currentMonthData = offlineDatabase[activeClient][activeMonth];
+                renderStats();
+                renderCalendar();
+                renderListTable();
+                renderAnalytics();
+                loadDayDetails(activeDayNum);
+            } else {
+                showToast("Data simulasi untuk bulan ini tiada.", "⚠️");
+            }
+        }
+
+        // SINKRONISASI MODAL ERROR
+        function showConnectionErrorModal() {
+            document.getElementById('sandbox-warning-ribbon').classList.remove('hidden');
+        }
+
+        function closeErrorModal() {
+            const modal = document.getElementById('connection-error-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        // MENGGANTI KLIEN / CABANG OUTLET
+        function changeClient() {
+            activeClient = document.getElementById('clientSelector').value;
+            activeDayNum = 1;
+            fetchLiveData();
+        }
+
+        // MENGGANTI BULAN PERENCANAAN
+        function changeMonth(monthUiKey) {
+            // Sinkronkan nama fizik helaian (Sheet tab) secara automatik
+            activeSheetTabName = sheetTabMappings[monthUiKey] || "JUN 2026";
+            activeMonth = monthUiKey;
+            activeDayNum = 1;
+            
+            document.querySelectorAll('.month-btn').forEach(btn => {
+                btn.className = "month-btn px-4.5 py-2 rounded-xl text-xs font-bold transition-all bg-white border border-slate-200 text-slate-700 hover:bg-slate-50";
+            });
+            const activeBtn = document.getElementById(`monthBtn-${monthUiKey}`);
+            activeBtn.className = "month-btn px-4.5 py-2 rounded-xl text-xs font-extrabold transition-all bg-sultan-600 text-white shadow-lg shadow-sultan-600/15 flex items-center gap-1.5 border border-sultan-600";
+
+            const formattedName = monthUiKey.replace('_', ' ');
+            document.getElementById('calendarMonthTitle').innerText = formattedName;
+            document.getElementById('listMonthTitle').innerText = formattedName;
+            document.getElementById('platformMonthTitle').innerText = formattedName;
+            document.getElementById('formatMonthTitle').innerText = formattedName;
+            document.getElementById('strategyMonthTitle').innerText = formattedName;
+            document.getElementById('sideMonthTitle').innerText = formattedName;
+
+            fetchLiveData();
+        }
+
+        // MENGALIHKAN TAB MENU UTAMA
+        function switchTab(tabKey) {
+            activeTab = tabKey;
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = "tab-btn flex items-center justify-center gap-2 px-5 py-2.5 text-xs md:text-sm font-bold rounded-lg transition-all text-slate-500 hover:text-slate-800";
+            });
+            const activeBtn = document.getElementById(`tabBtn-${tabKey}`);
+            activeBtn.className = "tab-btn flex items-center justify-center gap-2 px-5 py-2.5 text-xs md:text-sm font-bold rounded-lg transition-all text-sultan-600 bg-white shadow-sm";
+            
+            document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.add('hidden'));
+            document.getElementById(`tabContent-${tabKey}`).classList.remove('hidden');
+            
+            if(tabKey === 'list') renderListTable();
+        }
+
+        // MEMPERBARUI KARTU STATISTIK
+        function renderStats() {
+            if (!currentMonthData) return;
+            const contents = currentMonthData.contents;
+            const totalDays = currentMonthData.totalDays;
+            
+            let posted = 0, scheduled = 0, draft = 0;
+            for (let day = 1; day <= totalDays; day++) {
+                if (contents[day]) {
+                    if (contents[day].status === 'Posted') posted++;
+                    else if (contents[day].status === 'Scheduled') scheduled++;
+                    else draft++;
+                } else { draft++; }
+            }
+
+            const totalContent = posted + scheduled + draft;
+            const rate = totalContent > 0 ? Math.round((posted / totalContent) * 100) : 0;
+
+            document.getElementById('statTotalDays').innerText = `${totalDays} Hari`;
+            document.getElementById('statPosted').innerText = `${posted} Siaran`;
+            document.getElementById('statScheduled').innerText = `${scheduled} Siaran`;
+            document.getElementById('statDraft').innerText = `${draft} Siaran`;
+            document.getElementById('statRateText').innerText = `${rate}%`;
+            document.getElementById('statRateBar').style.width = `${rate}%`;
+        }
+
+        // MERENDER GRID HARI PADA KALENDAR
+        function renderCalendar() {
+            if (!currentMonthData) return;
+            const daysGrid = document.getElementById('calendarDaysGrid');
+            daysGrid.innerHTML = '';
+
+            const totalDays = currentMonthData.totalDays;
+            const startOffset = currentMonthData.startOffset;
+            const contents = currentMonthData.contents;
+
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const selectedFormat = document.getElementById('formatFilter').value;
+            const selectedStatus = document.getElementById('statusFilter').value;
+
+            for (let i = 0; i < startOffset; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = "bg-slate-100/30 border border-slate-100/50 rounded-xl min-h-[115px] opacity-20";
+                daysGrid.appendChild(emptyCell);
+            }
+
+            for (let day = 1; day <= totalDays; day++) {
+                const dayCell = document.createElement('div');
+                dayCell.id = `calCell-${day}`;
+                
+                const dayContent = contents[day];
+                let contentHtml = '';
+                let statusBgClasses = "bg-white hover:bg-slate-50 border-slate-200 text-slate-800";
+                
+                if (dayContent) {
+                    const matchesSearch = !query || dayContent.title.toLowerCase().includes(query) || dayContent.caption.toLowerCase().includes(query);
+                    const matchesFormat = selectedFormat === 'all' || dayContent.format === selectedFormat;
+                    const matchesStatus = selectedStatus === 'all' || dayContent.status === selectedStatus;
+
+                    if (dayContent.status === 'Posted') statusBgClasses = "bg-emerald-50/95 border-emerald-200 text-emerald-950 shadow-sm shadow-emerald-500/5";
+                    else if (dayContent.status === 'Scheduled') statusBgClasses = "bg-sky-50/95 border-sky-200 text-sky-955 shadow-sm shadow-sky-500/5";
+                    else statusBgClasses = "bg-slate-50 border-slate-200 text-slate-800 shadow-sm";
+
+                    if (!matchesSearch || !matchesFormat || !matchesStatus) statusBgClasses += " opacity-25";
+
+                    let badgeColor = "bg-slate-200 text-slate-900";
+                    if (dayContent.format === 'Video') badgeColor = "bg-amber-100 text-amber-955 border border-amber-200/60";
+                    else if (dayContent.format === 'Photo') badgeColor = "bg-blue-100 text-blue-955 border border-blue-200/60";
+                    else if (dayContent.format === 'Hadis') badgeColor = "bg-purple-100 text-purple-955 border border-purple-200/60";
+                    else if (dayContent.format === 'Review') badgeColor = "bg-rose-100 text-rose-955 border border-rose-200/60";
+
+                    contentHtml = `
+                        <div class="font-bold text-[11px] line-clamp-2 mt-1.5 leading-tight tracking-tight">${dayContent.title}</div>
+                        <div class="flex items-center gap-1 mt-auto pt-2">
+                            <span class="${badgeColor} text-[8.5px] px-1.5 py-0.5 rounded-md uppercase tracking-wide font-semibold">${dayContent.format}</span>
+                        </div>
+                    `;
+                } else {
+                    statusBgClasses = "border-dashed border-slate-200/60 bg-slate-50/40 text-slate-400";
+                }
+
+                let activeRing = day === activeDayNum ? "ring-4 ring-sultan-600 ring-offset-2 scale-[1.02] z-10 shadow-lg shadow-sultan-500/5" : "";
+                dayCell.className = `border rounded-2xl min-h-[115px] p-3 cursor-pointer flex flex-col justify-between transition-all duration-200 ${statusBgClasses} ${activeRing}`;
+                
+                dayCell.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <span class="text-[11px] font-extrabold">${day}</span>
+                        ${dayContent && dayContent.status === 'Posted' ? '<span class="text-[9px] bg-emerald-500/20 px-1.5 py-0.5 rounded-full text-emerald-800 font-extrabold border border-emerald-300/30">✓</span>' : ''}
+                    </div>
+                    ${contentHtml}
+                `;
+
+                dayCell.onclick = () => loadDayDetails(day);
+                daysGrid.appendChild(dayCell);
+            }
+        }
+
+        function renderListTable() {
+            if (!currentMonthData) return;
+            const tableBody = document.getElementById('listTableBody');
+            tableBody.innerHTML = '';
+            const contents = currentMonthData.contents;
+
+            let rowCount = 0;
+            const query = document.getElementById('searchInput').value.toLowerCase();
+
+            Object.keys(contents).forEach(day => {
+                const item = contents[day];
+                if (query && !item.title.toLowerCase().includes(query) && !item.caption.toLowerCase().includes(query)) return;
+                
+                rowCount++;
+                let tr = document.createElement('tr');
+                tr.className = `hover:bg-slate-50/50 cursor-pointer text-xs ${day == activeDayNum ? 'bg-sultan-50/40' : ''}`;
+                tr.onclick = () => loadDayDetails(parseInt(day));
+                
+                // Pemformat Lencana Format
+                let formatBadge = `<span class="px-2 py-0.5 bg-slate-100 rounded text-[10px] font-bold border border-slate-200">${item.format}</span>`;
+                if(item.format === 'Video') formatBadge = `<span class="px-2 py-0.5 bg-amber-100 text-amber-955 rounded text-[10px] font-extrabold border border-amber-200/50">🎥 Video</span>`;
+                else if(item.format === 'Photo') formatBadge = `<span class="px-2 py-0.5 bg-blue-100 text-blue-955 rounded text-[10px] font-extrabold border border-blue-200/50">📸 Photo</span>`;
+                else if(item.format === 'Hadis') formatBadge = `<span class="px-2 py-0.5 bg-purple-100 text-purple-955 rounded text-[10px] font-extrabold border border-purple-200/50">📖 Hadis</span>`;
+
+                tr.innerHTML = `
+                    <td class="py-4 px-4 font-bold text-slate-900">Hari ke-${day}</td>
+                    <td class="py-4 px-4">${formatBadge}</td>
+                    <td class="py-4 px-4"><strong>${item.title}</strong><div class="text-[11px] text-slate-400 truncate max-w-[280px] mt-0.5">${item.caption}</div></td>
+                    <td class="py-4 px-4"><span class="text-[10px] font-bold bg-slate-100 text-slate-700 px-2 py-0.5 rounded border border-slate-200/50">${item.status}</span></td>
+                    <td class="py-4 px-4 flex flex-wrap gap-1 mt-2">${item.platform.map(p => `<span class="bg-slate-50 text-slate-600 border border-slate-200/50 text-[10px] font-bold px-1.5 py-0.5 rounded">${p}</span>`).join('')}</td>
+                    <td class="py-4 px-4 text-right">${item.link ? `<a href="${item.link}" target="_blank" onclick="event.stopPropagation()" class="text-sultan-600 font-bold">Buka ↗</a>` : '-'}</td>
+                `;
+                tableBody.appendChild(tr);
+            });
+            document.getElementById('listRecordCount').innerText = `${rowCount} Rekod dijumpai`;
+        }
+
+        function renderAnalytics() {
+            if (!currentMonthData) return;
+            const contents = currentMonthData.contents;
+            const totalDays = currentMonthData.totalDays;
+
+            let totalPosts = 0;
+            let instagram = 0, facebook = 0, tiktok = 0, whatsapp = 0;
+            let video = 0, photo = 0, hadis = 0, review = 0;
+
+            Object.keys(contents).forEach(day => {
+                const item = contents[day];
+                totalPosts++;
+                if (item.platform.includes("Instagram")) instagram++;
+                if (item.platform.includes("Facebook")) facebook++;
+                if (item.platform.includes("TikTok")) tiktok++;
+                if (item.platform.includes("WhatsApp")) whatsapp++;
+
+                if (item.format === 'Video') video++;
+                else if (item.format === 'Photo') photo++;
+                else if (item.format === 'Hadis') hadis++;
+                else if (item.format === 'Review') review++;
+            });
+
+            const div = totalPosts || 1;
+
+            // Render Platform
+            document.getElementById('platformAnalyticsList').innerHTML = `
+                ${createMetricBar("📸 Instagram", instagram, Math.round((instagram/div)*100), "from-pink-500 to-rose-500")}
+                ${createMetricBar("👥 Facebook", facebook, Math.round((facebook/div)*100), "bg-blue-600")}
+                ${createMetricBar("🎥 TikTok", tiktok, Math.round((tiktok/div)*100), "bg-slate-900")}
+            `;
+
+            // Render Format
+            document.getElementById('formatAnalyticsList').innerHTML = `
+                ${createMetricBar("🎥 Video", video, Math.round((video/div)*100), "bg-sultan-500")}
+                ${createMetricBar("📸 Photo", photo, Math.round((photo/div)*100), "bg-blue-500")}
+                ${createMetricBar("📖 Hadis", hadis, Math.round((hadis/div)*100), "bg-purple-500")}
+                ${createMetricBar("⭐ Review", review, Math.round((review/div)*100), "bg-rose-500")}
+            `;
+
+            document.getElementById('strategyContentText').innerText = currentMonthData.strategy;
+        }
+
+        function createMetricBar(label, count, pct, bg) {
+            return `
+                <div class="space-y-1">
+                    <div class="flex justify-between items-center text-xs font-bold text-slate-700"><span>${label}</span><span>${count} Siaran (${pct}%)</span></div>
+                    <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden"><div class="${bg} h-full rounded-full" style="width: ${pct}%"></div></div>
+                </div>
+            `;
+        }
+
+        function loadDayDetails(dayNum) {
+            activeDayNum = dayNum;
+            if (!currentMonthData) return;
+            
+            const content = currentMonthData.contents[dayNum];
+            const titleInput = document.getElementById('sideTitleInput');
+            const captionInput = document.getElementById('sideCaptionInput');
+            const statusSelect = document.getElementById('sideStatusSelect');
+
+            document.getElementById('sideDate').innerText = `${dayNum} ${activeMonth.replace('_', ' ')}`;
+
+            if (content) {
+                titleInput.value = content.title;
+                captionInput.value = content.caption;
+                statusSelect.value = content.status;
+                document.getElementById('sideFormat').innerText = content.format;
+                document.getElementById('sideStatus').innerHTML = `<span class="bg-slate-100 text-slate-700 text-xs px-2.5 py-1 rounded-full font-bold">${content.status}</span>`;
+                document.getElementById('sidePlatforms').innerHTML = content.platform.map(p => `<span class="bg-slate-50 text-slate-700 text-[11px] px-2 py-1 rounded-md border border-slate-200">${p}</span>`).join('');
+                
+                // Urus Pautan Kandungan
+                document.getElementById('sideLinkContainer').classList.toggle('hidden', !content.link);
+                if(content.link) document.getElementById('sideLink').href = content.link;
+                
+                // Urus Pautan GDrive (Lajur I baru)
+                document.getElementById('sideGDriveContainer').classList.toggle('hidden', !content.gdriveLink);
+                if(content.gdriveLink) document.getElementById('sideGDriveLink').href = content.gdriveLink;
+            } else {
+                titleInput.value = ""; captionInput.value = ""; statusSelect.value = "Belum Ditetapkan";
+                document.getElementById('sideFormat').innerText = "-";
+                document.getElementById('sideStatus').innerText = "Tiada Siaran";
+                document.getElementById('sidePlatforms').innerHTML = "-";
+                document.getElementById('sideLinkContainer').classList.add('hidden');
+                document.getElementById('sideGDriveContainer').classList.add('hidden');
+            }
+
+            // Kemaskini sorotan ring sel kalendar
+            document.querySelectorAll('[id^="calCell-"]').forEach(cell => {
+                cell.classList.remove('ring-4', 'ring-sultan-600', 'ring-offset-2', 'scale-[1.02]', 'z-10', 'shadow-lg');
+            });
+            const activeCell = document.getElementById(`calCell-${dayNum}`);
+            if (activeCell) activeCell.classList.add('ring-4', 'ring-sultan-600', 'ring-offset-2', 'scale-[1.02]', 'z-10', 'shadow-lg');
+        }
+
+        // SIMPAN PERUBAHAN SECARA LOKAL
+        function saveLocalContent() {
+            if(!currentMonthData) return;
+            const titleVal = document.getElementById('sideTitleInput').value.trim();
+            const captionVal = document.getElementById('sideCaptionInput').value.trim();
+            const statusVal = document.getElementById('sideStatusSelect').value;
+
+            if (!currentMonthData.contents[activeDayNum]) {
+                currentMonthData.contents[activeDayNum] = { title: titleVal, format: "Photo", status: statusVal, platform: ["Instagram"], caption: captionVal, link: "", gdriveLink: "" };
+            } else {
+                currentMonthData.contents[activeDayNum].title = titleVal;
+                currentMonthData.contents[activeDayNum].caption = captionVal;
+                currentMonthData.contents[activeDayNum].status = statusVal;
+            }
+
+            renderStats(); renderCalendar(); renderAnalytics(); loadDayDetails(activeDayNum);
+            showToast("Disimpan lokal pada paparan web sementara!", "💾");
+        }
+
+        function copyCaptionToClipboard() {
+            const captionVal = document.getElementById('sideCaptionInput').value;
+            if (!captionVal) return showToast("Tiada kapsyen!", "⚠️");
+            const temp = document.createElement("textarea"); temp.value = captionVal; document.body.appendChild(temp); temp.select();
+            document.execCommand('copy'); document.body.removeChild(temp);
+            showToast("Kapsyen berjaya disalin!", "📋");
+        }
+
+        function triggerFilters() { renderCalendar(); if(activeTab === 'list') renderListTable(); }
+
+        // SISTEM TOAST MODAL
+        function showToast(message, icon = '✨') {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastIcon').innerText = icon;
+            document.getElementById('toastMessage').innerText = message;
+            toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+            setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none'), 3000);
+        }
+
+        window.onload = () => { fetchLiveData(); }
+    </script>
+</body>
+</html>
