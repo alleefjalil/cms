@@ -548,42 +548,44 @@ function renderCalendar() {
 
     for (let day = 1; day <= totalDays; day++) {
         const item = contents[day];
-        // Jika status kosong/tiada, set kepada "Unassigned"
+        // Normalisasi status: jika kosong/undefined, set kepada 'Unassigned'
         const status = (item && item.status && item.status.trim() !== "") ? item.status : "Unassigned";
         
-        // Warna latar belakang kotak mengikut status
+        // Warna latar belakang kotak (bg) dan border mengikut status
         const bgStatus = status === 'Posted' ? 'bg-emerald-50 border-emerald-200' :
                          status === 'Scheduled' ? 'bg-sky-50 border-sky-200' :
                          status === 'Drafted' ? 'bg-amber-50 border-amber-200' : 
-                         'bg-red-50 border-red-200'; // Unassigned (Merah)
+                         'bg-red-50 border-red-200'; // Unassigned
 
         const dayCell = document.createElement('div');
-        dayCell.className = `border rounded-2xl min-h-[120px] p-3 cursor-pointer flex flex-col justify-between transition-all ${bgStatus}`;
+        dayCell.className = `border rounded-2xl min-h-[120px] p-2.5 cursor-pointer flex flex-col justify-between transition-all ${bgStatus}`;
         
-        let contentHtml = `<div class="flex justify-between items-center"><span class="text-[11px] font-extrabold text-slate-800">${day}</span>`;
+        let contentHtml = `<div class="flex justify-between items-center"><span class="text-[10px] font-extrabold text-slate-800">${day}</span>`;
         
         if (item) {
+            // Ikon tick untuk Posted
             if (status === 'Posted') {
-                contentHtml += `<div class="w-5 h-5 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>`;
+                contentHtml += `<div class="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600"><svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7"></path></svg></div>`;
             }
             contentHtml += `</div>`;
             
             const fmt = (item.format || "").trim();
+            const statusText = status === "Unassigned" ? "UNASSIGNED" : status.toUpperCase();
             const statusColor = status === 'Posted' ? 'bg-emerald-100 text-emerald-700' :
                                 status === 'Scheduled' ? 'bg-sky-100 text-sky-700' :
                                 status === 'Drafted' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700';
             
             contentHtml += `
-                <div class="mt-2 flex-grow">
-                    <div class="font-bold text-[11px] text-slate-900 leading-tight truncate">${item.title}</div>
+                <div class="mt-1.5 flex-grow">
+                    <div class="font-bold text-[10px] text-slate-900 leading-tight line-clamp-2">${item.title}</div>
                 </div>
-                <div class="mt-3 flex gap-1 items-center">
-                    <span class="px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider bg-white/60 text-slate-600">${fmt}</span>
-                    <span class="px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider ${statusColor}">${status.toUpperCase()}</span>
+                <div class="mt-2 flex flex-wrap gap-1">
+                    <span class="px-1 py-0.5 rounded text-[8px] font-black uppercase tracking-wider bg-white/60 text-slate-600">${fmt}</span>
+                    <span class="px-1 py-0.5 rounded text-[8px] font-black uppercase tracking-wider ${statusColor}">${statusText}</span>
                 </div>
             `;
         } else {
-            contentHtml += `</div><div class="text-[10px] text-red-500 font-bold italic mt-2">UNASSIGNED</div>`;
+            contentHtml += `</div><div class="text-[9px] text-red-500 font-bold italic mt-2">UNASSIGNED</div>`;
         }
 
         dayCell.innerHTML = contentHtml;
