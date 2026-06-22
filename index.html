@@ -538,8 +538,7 @@
             document.getElementById('statRateBar').style.width = `${rate}%`;
         }
 
-        // DRAW CELL CONSTRUCTS ON CALENDAR GRID
-       function renderCalendar() {
+function renderCalendar() {
     if (!currentMonthData || !currentMonthData.contents) return;
     const daysGrid = document.getElementById('calendarDaysGrid');
     daysGrid.innerHTML = '';
@@ -549,35 +548,42 @@
 
     for (let day = 1; day <= totalDays; day++) {
         const item = contents[day];
-        const dayCell = document.createElement('div');
         
-        // Menentukan status: Jika status kosong atau undefined, anggap sebagai 'Unassigned'
+        // Logik Status: Jika item wujud dan status ada, guna status itu.
+        // Jika item wujud tapi status kosong, atau item tiada langsung, anggap "Unassigned".
         const status = (item && item.status && item.status.trim() !== "") ? item.status : "Unassigned";
         
-        dayCell.className = `border rounded-2xl min-h-[115px] p-3 cursor-pointer flex flex-col justify-between transition-all ${item ? 'bg-white border-emerald-200 shadow-sm' : 'bg-slate-50 border-slate-100'}`;
+        // Warna kotak mengikut status
+        const bgStatus = status === 'Posted' ? 'bg-emerald-50 border-emerald-200' :
+                         status === 'Scheduled' ? 'bg-sky-50 border-sky-200' :
+                         status === 'Drafted' ? 'bg-amber-50 border-amber-200' : 
+                         'bg-slate-50 border-slate-100'; // Unassigned
+
+        const dayCell = document.createElement('div');
+        dayCell.className = `border rounded-2xl min-h-[115px] p-3 cursor-pointer flex flex-col justify-between transition-all ${bgStatus}`;
         
         let contentHtml = `<div class="flex justify-between items-center"><span class="text-[11px] font-extrabold text-slate-800">${day}</span>`;
         
         if (item) {
-            // Ikon tick hanya jika status adalah 'Posted'
+            // Ikon tick hanya untuk Posted
             if (status === 'Posted') {
-                contentHtml += `<div class="w-5 h-5 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>`;
+                contentHtml += `<div class="w-5 h-5 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>`;
             }
             contentHtml += `</div>`;
             
             const fmt = (item.format || "").trim();
-            // Warna mengikut status (termasuk Unassigned)
-            let statusColor = status === 'Posted' ? 'bg-emerald-100 text-emerald-700' :
-                              status === 'Scheduled' ? 'bg-sky-100 text-sky-700' :
-                              status === 'Drafted' ? 'bg-amber-100 text-amber-700' : 'bg-slate-200 text-slate-600';
+            // Warna label format
+            const statusColor = status === 'Posted' ? 'bg-emerald-100 text-emerald-700' :
+                                status === 'Scheduled' ? 'bg-sky-100 text-sky-700' :
+                                status === 'Drafted' ? 'bg-amber-100 text-amber-700' : 'bg-slate-200 text-slate-600';
             
             contentHtml += `<div class="font-bold text-[11px] mt-2 text-slate-900 leading-tight">${item.title}</div>
                             <div class="mt-auto pt-3 flex gap-1">
-                                <span class="px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider bg-slate-100 text-slate-600">${fmt}</span>
+                                <span class="px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider bg-white/50 text-slate-600">${fmt}</span>
                                 <span class="px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider ${statusColor}">${status}</span>
                             </div>`;
         } else {
-            contentHtml += `</div><div class="text-[10px] text-slate-300 font-bold italic mt-2">Tiada Kandungan</div>`;
+            contentHtml += `</div><div class="text-[10px] text-slate-300 font-bold italic mt-2">Unassigned</div>`;
         }
 
         dayCell.innerHTML = contentHtml;
