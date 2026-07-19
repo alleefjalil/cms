@@ -33,7 +33,7 @@
         }
     </script>
     <style>
-        /* Custom fine-scrollbar styling for corporate elegance */
+        /* Gaya scrollbar kustom untuk estetika UI */
         ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: #f8fafc; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
@@ -72,6 +72,7 @@
                         <select id="clientSelector" onchange="changeClient()" class="font-extrabold text-sm text-brand-600 bg-slate-50 hover:bg-slate-100/80 py-1.5 px-3 rounded-xl cursor-pointer outline-none transition-all border border-slate-200/60 focus:border-brand-500 shadow-sm">
                             <option value="changlun">Ayam Gepuk Sultan Changlun</option>
                             <option value="jitra">Ayam Gepuk Sultan Jitra</option>
+                            <option value="alorsetar">Ayam Gepuk Sultan Alor Setar</option>
                         </select>
                         <!-- Connection Badge -->
                         <span id="connectionStatus" class="bg-amber-100 text-amber-800 border border-amber-200/50 text-[10px] px-2.5 py-1 rounded-full font-bold transition-all duration-300 animate-pulse">🔄 Syncing...</span>
@@ -107,15 +108,12 @@
                     SELECT TARGET MONTH:
                 </div>
                 <div class="flex gap-2 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
-                    <button onclick="changeMonth('mei 2026', 'MEI_2026')" id="monthBtn-MEI_2026" class="month-btn px-4.5 py-2 rounded-xl text-xs font-bold transition-all bg-white border border-slate-200 text-slate-700 hover:bg-slate-50">
-                        MAY 2026
+                    <button onclick="changeMonth('mei 2026', 'MEI_2026')" id="monthBtn-MEI_2026" class="month-btn px-4.5 py-2 rounded-xl text-xs font-bold transition-all bg-white border border-slate-200 text-slate-700 hover:bg-slate-50">MAY 2026</button>
+                    <button onclick="changeMonth('JUN 2026', 'JUN_2026')" id="monthBtn-JUN_2026" class="month-btn px-4.5 py-2 rounded-xl text-xs font-bold transition-all bg-white border border-slate-200 text-slate-700 hover:bg-slate-50">JUN 2026</button>
+                    <button onclick="changeMonth('july 2026', 'JULAI_2026')" id="monthBtn-JULAI_2026" class="month-btn px-4.5 py-2 rounded-xl text-xs font-extrabold transition-all bg-brand-900 text-white shadow-lg shadow-brand-900/15 flex items-center gap-1.5 border border-brand-900">
+                        JULAI 2026 <span class="bg-red-500 text-[8px] text-white px-1.5 py-0.5 rounded-full animate-pulse font-black">ACTIVE</span>
                     </button>
-                    <button onclick="changeMonth('JUN 2026', 'JUN_2026')" id="monthBtn-JUN_2026" class="month-btn px-4.5 py-2 rounded-xl text-xs font-extrabold transition-all bg-brand-900 text-white shadow-lg shadow-brand-900/15 flex items-center gap-1.5 border border-brand-900">
-                        JUN 2026 <span class="bg-red-500 text-[8px] text-white px-1.5 py-0.5 rounded-full animate-pulse font-black">ACTIVE</span>
-                    </button>
-                    <button onclick="changeMonth('july 2026', 'JULAI_2026')" id="monthBtn-JULAI_2026" class="month-btn px-4.5 py-2 rounded-xl text-xs font-bold transition-all bg-white border border-slate-200 text-slate-700 hover:bg-slate-50">
-                        JULY 2026
-                    </button>
+                    <button onclick="changeMonth('ogos 2026', 'OGOS_2026')" id="monthBtn-OGOS_2026" class="month-btn px-4.5 py-2 rounded-xl text-xs font-bold transition-all bg-white border border-slate-200 text-slate-700 hover:bg-slate-50">OGOS 2026</button>
                 </div>
             </div>
 
@@ -312,27 +310,32 @@
 
     <!-- MAIN JAVASCRIPT LOGIC -->
     <script>
-        // UPDATED GOOGLE APPS SCRIPT WEB APP API ENDPOINTS (AS PROVIDED BY PORTFOLIO MANAGER)
+        // UPDATED GOOGLE APPS SCRIPT WEB APP API ENDPOINTS
         const API_URLS = {
             changlun: "https://script.google.com/macros/s/AKfycbzRTv7dCo5pKKt7gzrsipaQfP9PDJulQjyns1Hgs3tq0y1n-2Pvna5vn4p8eh7T4TD2fg/exec",
-            jitra: "https://script.google.com/macros/s/AKfycbwQ7TclQ8rJRSQonleOD-IkSTCivFjM69HlHMFrrwRszmFVoAn8_F-vvbmDRk8RxLGV/exec"
+            jitra: "https://script.google.com/macros/s/AKfycbwQ7TclQ8rJRSQonleOD-IkSTCivFjM69HlHMFrrwRszmFVoAn8_F-vvbmDRk8RxLGV/exec",
+            alorsetar: "https://script.google.com/macros/s/AKfycbzTMTNV8eNqbTkGwQsB7jGSdatkVUyZENm7BSzSZQxebtMsxALkZSSW4YB5TzDtlPCP/exec"
         };
 
-        // UI tabs index mapper to align exactly with Google Sheets physical tabs
+        // --- FIX: Pastikan activeClient diisytiharkan di sini ---
+        let activeClient = 'changlun'; 
+        // --------------------------------------------------------
+
         const sheetTabMappings = {
             MEI_2026: "mei 2026",
             JUN_2026: "JUN 2026",
-            JULAI_2026: "july 2026"
+            JULAI_2026: "july 2026",
+            OGOS_2026: "ogos 2026"
         };
 
         let activeTab = 'calendar';
-        let activeMonth = 'JUN_2026'; 
-        let activeSheetTabName = 'JUN 2026'; 
-        let activeClient = 'changlun';
+        let activeMonth = 'JULAI_2026'; 
+        let activeSheetTabName = 'july 2026'; 
         let activeDayNum = 1;
         let currentMonthData = null;
 
         // REAL-DATA COPY TRANSCRIPT FROM THE GOOGLE SHEET (OFFLINE LOCAL FALLBACK)
+        // Keeps the dashboard functional with exact, matching content when run in sandboxed environments
         const offlineDatabase = {
             changlun: {
                 MEI_2026: {
@@ -350,10 +353,10 @@
                     strategy: "Diversify campaign media formats targeting student communities (UUM, UniMAP, KMK) near Changlun. Post TikTok videos during peak evening hours (8PM-10PM) and publish spiritual or motivational quotes on Friday mornings.",
                     contents: {
                         1: { title: "ABEY JANJI (SULTAN COMBO INTAKE)", format: "Video", status: "Posted", platform: ["Instagram", "Facebook", "TikTok"], caption: "Let us enjoy spicy Ayam Gepuk topped with cold premium ice cream at Ayam Gepuk Sultan Changlun! 😻\n\n📍 Pekan Changlun II (Behind C-MART Changlun)\n⏰ Operating Hours: Daily | 11.00 AM - 10.00 PM\n\nDirect bookings:\nhttps://wa.me/60174695064\n\n#AyamGepukSultan #Changlun #KedahFoodie", link: "https://vt.tiktok.com/ZS92PptJ8S/", gdriveLink: "https://drive.google.com" },
-                        2: { title: "FAMILY MEALTIME PEKAN CHANGLUN", format: "Photo", status: "Posted", platform: ["Instagram", "Facebook"], caption: "THE PERFECT DINNER SPOT FOR FAMILIES! 👨‍👩‍👧‍👧🌶️\nLook at how happy they are enjoying our freshly prepared hot chicken soup alongside our famous spicy gepuk chicken behind C-MART!\n\n📍 Pekan Changlun II\nMore info: https://wa.me/60177455179", link: "https://www.instagram.com", gdriveLink: "https://drive.google.com" },
+                        2: { title: "FAMILY MEALTIME PEKAN CHANGLUN", format: "Photo", status: "Posted", platform: ["Instagram", "Facebook"], caption: "THE PERFECT DINNER SPOT FOR FAMILIES! 👨‍👩‍👧‍👦🌶️\nLook at how happy they are enjoying our freshly prepared hot chicken soup alongside our famous spicy gepuk chicken behind C-MART!\n\n📍 Pekan Changlun II\nMore info: https://wa.me/60177455179", link: "https://www.instagram.com", gdriveLink: "https://drive.google.com" },
                         3: { title: "AYAM GEPUK SULTAN GRAND RETURN 👑", format: "Video", status: "Posted", platform: ["Instagram", "Facebook", "TikTok"], caption: "We are back fully active after the Eid festivities! 😻 Satisfy your spice cravings with our hot sambal today.\n\n📍 Pekan Changlun II\n⏰ Operates: 11.00 AM - 10.00 PM", link: "https://vt.tiktok.com/ZS92PptJ8S/H7Q-XBZBl/", gdriveLink: "" },
-                        4: { title: "SPICY GEPUK LADIES OUTING!", format: "Photo", status: "Belum Ditetapkan", platform: ["Instagram", "Facebook"], caption: "These ladies cried happy tears enjoying our super fiery Level Sultan. Bring your friends along this weekend! 👩‍❤️‍👩🌶️", link: "", gdriveLink: "" },
-                        5: { title: "FRIDAY INSPIRATIONAL HADIS", format: "Hadis", status: "Scheduled", platform: ["Instagram", "Facebook"], caption: "Blessed Friday to all our customers! ✨ Start the day with a grateful heart and positive thoughts.", link: "", gdriveLink: "" }
+                        4: { title: "SPICY GEPUK LADIES OUTING!", format: "Photo", status: "Posted", platform: ["Instagram", "Facebook"], caption: "These ladies cried happy tears enjoying our super fiery Level Sultan. Bring your friends along this weekend! 👩‍❤️‍👩🌶️", link: "", gdriveLink: "" },
+                        5: { title: "FRIDAY INSPIRATIONAL HADIS", format: "Hadis", status: "Posted", platform: ["Instagram", "Facebook"], caption: "Blessed Friday to all our customers! ✨ Start the day with a grateful heart and positive thoughts.", link: "", gdriveLink: "" }
                     }
                 },
                 JULAI_2026: {
@@ -382,7 +385,7 @@
                     contents: {
                         1: { title: "OFFICE DELIVERY SPECIAL", format: "Video", status: "Posted", platform: ["Instagram", "Facebook", "TikTok"], caption: "Hungry at the office? We deliver hot, crispy, and spicy Sultan combos straight to your workspace! 💼🔥\n\n📍 Central Jitra Business Hub\n⏰ Operations: 11.00 AM - 9.30 PM", link: "https://vt.tiktok.com", gdriveLink: "" },
                         2: { title: "SULTAN COMBO JITRA EDITION", format: "Photo", status: "Posted", platform: ["Instagram", "Facebook"], caption: "A wholesome meal crafted for spice lovers. Get our Jitra combo pack at an introductory price this week!", link: "", gdriveLink: "" },
-                        5: { title: "JITRA WEEKEND REMINDER", format: "Hadis", status: "Belum Ditetapkan", platform: ["Instagram", "Facebook"], caption: "Weekend is just around the corner. Spend quality time with family over hot and delicious spicy chicken.", link: "", gdriveLink: "" },
+                        5: { title: "JITRA WEEKEND REMINDER", format: "Hadis", status: "Posted", platform: ["Instagram", "Facebook"], caption: "Weekend is just around the corner. Spend quality time with family over hot and delicious spicy chicken.", link: "", gdriveLink: "" },
                         8: { title: "FAST DELIVERY SERVICE TEASER", format: "Video", status: "Scheduled", platform: ["Instagram", "TikTok"], caption: "Rain or shine, our riders ensure your Ayam Gepuk arrives fresh and burning hot!", link: "", gdriveLink: "" }
                     }
                 },
@@ -538,63 +541,92 @@
             document.getElementById('statRateBar').style.width = `${rate}%`;
         }
 
-function renderCalendar() {
-    if (!currentMonthData || !currentMonthData.contents) return;
-    const daysGrid = document.getElementById('calendarDaysGrid');
-    daysGrid.innerHTML = '';
-    const { totalDays, startOffset, contents } = currentMonthData;
+        // DRAW CELL CONSTRUCTS ON CALENDAR GRID
+        function renderCalendar() {
+            if (!currentMonthData) return;
+            const daysGrid = document.getElementById('calendarDaysGrid');
+            daysGrid.innerHTML = '';
 
-    for (let i = 0; i < startOffset; i++) daysGrid.appendChild(document.createElement('div'));
+            const totalDays = currentMonthData.totalDays;
+            const startOffset = currentMonthData.startOffset;
+            const contents = currentMonthData.contents;
 
-    for (let day = 1; day <= totalDays; day++) {
-        const item = contents[day];
-        const status = (item && item.status && item.status.trim() !== "") ? item.status : "Unassigned";
-        
-        // 1. Warna Background (Bg) ikut Status
-        const bgStatus = status === 'Posted' ? 'bg-emerald-50' :
-                         status === 'Scheduled' ? 'bg-sky-50' :
-                         status === 'Drafted' ? 'bg-amber-50' : 'bg-red-50';
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const selectedFormat = document.getElementById('formatFilter').value;
+            const selectedStatus = document.getElementById('statusFilter').value;
 
-        // 2. Warna Border (Outline) ikut Format
-        const fmt = (item && item.format) ? item.format.trim() : "";
-        const borderFormat = fmt === 'Video' ? 'border-amber-400' :
-                             fmt === 'Photo' ? 'border-sky-400' :
-                             fmt === 'Hadis' ? 'border-purple-400' :
-                             fmt === 'Review' ? 'border-rose-400' : 'border-slate-200';
-
-        const dayCell = document.createElement('div');
-        dayCell.className = `border-2 rounded-2xl min-h-[120px] p-3 cursor-pointer flex flex-col justify-between transition-all ${bgStatus} ${borderFormat}`;
-        
-        let contentHtml = `<div class="flex justify-between items-center"><span class="text-[11px] font-extrabold text-slate-800">${day}</span>`;
-        
-        if (item) {
-            if (status === 'Posted') {
-                contentHtml += `<div class="w-5 h-5 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>`;
+            // Fill empty leading offsets
+            for (let i = 0; i < startOffset; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = "bg-slate-100/30 border border-slate-100/50 rounded-xl min-h-[115px] opacity-20";
+                daysGrid.appendChild(emptyCell);
             }
-            contentHtml += `</div>`;
-            
-            const statusText = status === "Unassigned" ? "BELUM DITETAPKAN" : status.toUpperCase();
-            const statusColor = status === 'Posted' ? 'bg-emerald-100 text-emerald-700' :
-                                status === 'Scheduled' ? 'bg-sky-100 text-sky-700' :
-                                status === 'Drafted' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700';
-            
-            contentHtml += `
-                <div class="mt-2 flex-grow">
-                    <div class="font-bold text-[11px] text-slate-900 leading-tight line-clamp-2">${item.title}</div>
-                </div>
-                <div class="mt-3 flex flex-wrap gap-1 items-center">
-                    <span class="px-1.5 py-0.5 rounded-md text-[8px] font-black uppercase tracking-wider bg-white/60 text-slate-600">${fmt}</span>
-                    <span class="px-1.5 py-0.5 rounded-md text-[8px] font-black uppercase tracking-wider ${statusColor}">${statusText}</span>
-                </div>
-            `;
-        } else {
-            contentHtml += `</div><div class="text-[9px] text-red-500 font-bold italic mt-2">BELUM DITETAPKAN</div>`;
+
+            // Draw month grid cells
+            for (let day = 1; day <= totalDays; day++) {
+                const dayCell = document.createElement('div');
+                dayCell.id = `calCell-${day}`;
+                
+                const dayContent = contents[day];
+                let contentHtml = '';
+                let statusBgClasses = "bg-white hover:bg-slate-50 border-slate-200 text-slate-800";
+                
+                if (dayContent) {
+                    const matchesSearch = !query || dayContent.title.toLowerCase().includes(query) || dayContent.caption.toLowerCase().includes(query);
+                    const matchesFormat = selectedFormat === 'all' || dayContent.format === selectedFormat;
+                    const matchesStatus = selectedStatus === 'all' || dayContent.status === selectedStatus;
+
+                    if (dayContent.status === 'Posted') statusBgClasses = "bg-emerald-50/95 border-emerald-200 text-emerald-955 shadow-sm shadow-emerald-500/5";
+                    else if (dayContent.status === 'Scheduled') statusBgClasses = "bg-sky-50/95 border-sky-200 text-sky-955 shadow-sm shadow-sky-500/5";
+                    else statusBgClasses = "bg-slate-50 border-slate-200 text-slate-800 shadow-sm";
+
+                    if (!matchesSearch || !matchesFormat || !matchesStatus) statusBgClasses += " opacity-25";
+
+                    let badgeColor = "bg-slate-200 text-slate-900";
+                    if (dayContent.format === 'Video') badgeColor = "bg-amber-100 text-amber-955 border border-amber-200/60";
+                    else if (dayContent.format === 'Photo') badgeColor = "bg-blue-100 text-blue-955 border border-blue-200/60";
+                    else if (dayContent.format === 'Hadis') badgeColor = "bg-purple-100 text-purple-955 border border-purple-200/60";
+                    else if (dayContent.format === 'Review') badgeColor = "bg-rose-100 text-rose-955 border border-rose-200/60";
+
+                    // Menentukan warna label status mengikut jenis status
+                    let statusBadgeColor = "bg-slate-100 text-slate-800 border border-slate-200";
+                    let statusTextUpper = "BELUM DITETAPKAN";
+                    if (dayContent.status === 'Posted') {
+                        statusBadgeColor = "bg-emerald-100 text-emerald-800 border border-emerald-200/50";
+                        statusTextUpper = "POSTED";
+                    } else if (dayContent.status === 'Scheduled') {
+                        statusBadgeColor = "bg-sky-100 text-sky-800 border border-sky-200/50";
+                        statusTextUpper = "SCHEDULED";
+                    }
+
+                    // Paparan status dan format diletakkan secara bersebelahan di bahagian bawah kotak hari
+                    contentHtml = `
+                        <div class="font-bold text-[11px] line-clamp-2 mt-1.5 leading-tight tracking-tight">${dayContent.title}</div>
+                        <div class="flex flex-wrap gap-1 mt-auto pt-2">
+                            <span class="${badgeColor} text-[8px] px-1.5 py-0.5 rounded-md uppercase tracking-wide font-black">${dayContent.format}</span>
+                            <span class="${statusBadgeColor} text-[8px] px-1.5 py-0.5 rounded-md uppercase tracking-wide font-black">${statusTextUpper}</span>
+                        </div>
+                    `;
+                } else {
+                    statusBgClasses = "border-dashed border-slate-200/60 bg-slate-50/40 text-slate-400";
+                }
+
+                let activeRing = day === activeDayNum ? "ring-4 ring-brand-900 ring-offset-2 scale-[1.02] z-10 shadow-lg" : "";
+                dayCell.className = `border rounded-2xl min-h-[115px] p-3 cursor-pointer flex flex-col justify-between transition-all duration-200 ${statusBgClasses} ${activeRing}`;
+                
+                dayCell.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <span class="text-[11px] font-extrabold">${day}</span>
+                        ${dayContent && dayContent.status === 'Posted' ? '<span class="text-[9px] bg-emerald-500/20 px-1.5 py-0.5 rounded-full text-emerald-800 font-extrabold border border-emerald-300/30">✓</span>' : ''}
+                    </div>
+                    ${contentHtml}
+                `;
+
+                dayCell.onclick = () => loadDayDetails(day);
+                daysGrid.appendChild(dayCell);
+            }
         }
 
-        dayCell.innerHTML = contentHtml;
-        daysGrid.appendChild(dayCell);
-    }
-}
         // RENDER OUTLINES TO THE SPREADSHEET TABLE LIST TAB
         function renderListTable() {
             if (!currentMonthData) return;
